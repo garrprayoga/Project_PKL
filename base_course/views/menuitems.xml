@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="parent_menu_course"
+        name="Course"
+        sequence="23"
+        />
+
+    <menuitem
+        id="menu_item_course_subject"
+        name="Course Subject"
+        parent ="parent_menu_course"
+        action="course_subject_action"
+    />
+
+    <menuitem
+        id="menu_item_course_order"
+        name="Course Order"
+        parent ="parent_menu_course"
+        action="course_order_action"
+    />
+</odoo>

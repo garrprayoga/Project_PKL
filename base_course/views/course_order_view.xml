@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="course_order_view_tree" model="ir.ui.view">
+        <field name="name">course.order.view.tree</field>
+        <field name="model">course.order</field>
+        <field name="arch" type="xml">
+            <tree string="Course Order">
+                <field name="name"/>
+                <field name="student_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="course_order_view_form" model="ir.ui.view">
+        <field name="name">course.order.view.form</field>
+        <field name="model">course.order</field>
+        <field name="arch" type="xml">
+            <form string="Course Order">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="student_id"/> 
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="order_line" string="Line">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="course_id"></field>
+                                    <field name="price"></field>
+                                </tree>
+                            </field>                                
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="course_order_action" model="ir.actions.act_window">
+        <field name="name">Course Order Action</field>
+        <field name="res_model">course.order</field>
+        <field name="view_mode">tree,form</field>
+        <!-- <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            
+        </field> -->
+    </record>
+</odoo>
