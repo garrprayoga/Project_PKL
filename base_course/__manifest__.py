@@ -9,6 +9,7 @@
     "version": "17.0.1.0.1",
     "depends": ['base'],
     "data": [
+        "data\sequence.xml",
         "security/ir.model.access.csv",
         "views\course_subject_view.xml",
         "views\course_order_view.xml",
