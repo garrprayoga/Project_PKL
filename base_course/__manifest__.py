@@ -14,6 +14,7 @@
         "views\course_subject_view.xml",
         "views\course_order_view.xml",
         "views\menuitems.xml",
+        'views/res_partner_view.xml',  
 
     ],
     # 'post_init_hook': 'post_init_hook',

@@ -14,3 +14,8 @@
 2. membuat fields.selection untuk pilihan kayak opsi dengan 4 pilihan yaitu done,confirm,draft,cancel
 3. membuat button dari 4 state di atas lalu d hubungkan ke status bar
 4. lalu di filter berdasarkan tiap state dan di group by state
+
+09/09/2025
+1. membuat module extend dan inherite dari course subject
+2. nambahin category nya dan waktu nya berapa lama
+3. yang course order inherite ke model res partner terus tambahin field is_student(boolean) agar yang tampil student nya hanya yang true

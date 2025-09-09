@@ -5,7 +5,11 @@ class CourseOrder(models.Model):
     _description = 'Course Order'
     
     name = fields.Char('Name', required=True, default="New", copy=False)
-    student_id = fields.Many2one('res.partner', string='Student')
+    student_id = fields.Many2one(
+        'res.partner',
+        string='Student',
+        domain=[('is_student', '=', True)] 
+    )
     line_ids = fields.One2many('course.order.line', 'course_order_id', string='Line')
     total_price = fields.Float(compute='_compute_total_price', string='Total Price', store=True)
     state = fields.Selection([

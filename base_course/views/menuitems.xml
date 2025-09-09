@@ -19,4 +19,11 @@
         parent ="parent_menu_course"
         action="course_order_action"
     />
+
+    <menuitem
+        id="menu_item_course_order"
+        name="Course Order"
+        parent ="parent_menu_course"
+        action="course_order_action"
+    />
 </odoo>

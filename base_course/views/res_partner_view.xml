@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_res_partner_form_inherit_student" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.student</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="Course Info">
+                    <field name="is_student"/>
+                </group>
+            </sheet>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_res_partner_tree_inherit_student" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.student</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="is_student"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_res_partner_search_inherit_student" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit.student</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="is_student"/>
+                <filter string="Students" name="students_only" domain="[('is_student','=',True)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Is Student" name="group_is_student" context="{'group_by':'is_student'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
