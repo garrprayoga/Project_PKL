@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_borrow_order" model="ir.sequence">
+        <field name="name">Peminjaman Buku</field>
+        <field name="code">borrow.order</field>
+        <field name="prefix">BOR/%(year)s/</field>
+        <field name="suffix"></field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

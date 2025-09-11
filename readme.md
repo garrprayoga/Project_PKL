@@ -1,3 +1,6 @@
+run odoo :
+C:\odoo17-venv\Scripts\activate
+python C:\odoo17\odoo-bin -c C:\odoo17\odoo.conf -d odoo17 --log-level=debug
 03/09/2025
 ## Latihan Odoo PKL SMK AS Habil
 
@@ -19,3 +22,8 @@
 1. membuat module extend dan inherite dari course subject
 2. nambahin category nya dan waktu nya berapa lama
 3. yang course order inherite ke model res partner terus tambahin field is_student(boolean) agar yang tampil student nya hanya yang true
+
+10/10/2025
+1. Membuat Module Peminjaman Buku 
+2. Dengan fungsi tidak bisa minjam sebelum mengembalikan buku sebelumnya 
+3. Dan ada stok buku nya yang tersedia jika buku nya tidak tersedia stok nya maka tidak muncul nama buku tersebut
