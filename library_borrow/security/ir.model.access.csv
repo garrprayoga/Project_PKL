@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_borrow_order_user,borrow.order.user,model_borrow_order,,1,1,1,1
 access_book_data,Access Book Data,model_book_data,,1,1,1,1
+access_library_penalty_rule_user,access.library.penalty.rule.user,model_library_penalty_rule,base.group_user,1,1,1,1
+access_library_penalty_rule_line,access_library_penalty_rule_line,model_library_penalty_rule_line,base.group_user,1,1,1,1

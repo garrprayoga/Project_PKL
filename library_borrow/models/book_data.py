@@ -1,4 +1,3 @@
-# models/book_data.py
 from odoo import models, fields, api
 
 class BookData(models.Model):
@@ -20,8 +19,13 @@ class BookData(models.Model):
         compute='_compute_available_copies',
         store=True,
     )
+    borrow_order_ids = fields.One2many(
+        'borrow.order',
+        'book_id',
+        string="Borrow Orders"
+    )
 
-
+    @api.depends('borrow_order_ids.state')  
     def _compute_borrowed_count(self):
         for book in self:
             active_orders = self.env['borrow.order'].search([

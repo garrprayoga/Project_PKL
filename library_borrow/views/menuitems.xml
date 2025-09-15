@@ -19,4 +19,11 @@
         parent="menu_library_root" 
         action="book_data_action" 
         sequence="2"/>
+
+    <menuitem 
+        id="menu_library_penalty_root"
+        name="Penalty Rules"
+        parent="menu_library_root"
+        action="action_library_penalty_rule"
+        sequence="10"/>
 </odoo>

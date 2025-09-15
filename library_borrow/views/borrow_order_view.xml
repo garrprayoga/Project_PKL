@@ -1,4 +1,5 @@
 <odoo>
+    <!-- Tree View -->
     <record id="borrow_order_view_tree" model="ir.ui.view">
         <field name="name">borrow.order.tree</field>
         <field name="model">borrow.order</field>
@@ -8,16 +9,22 @@
                 <field name="partner_id"/>
                 <field name="book_id"/>  
                 <field name="borrow_date"/>
+                <field name="due_date"/> 
                 <field name="return_date"/>
                 <field name="duration_days"/>
+                <field name="late_days"/>
+                <field name="penalty_rule_id"/>
+                <field name="penalty_per_day"/>
+                <field name="penalty_amount"/>
                 <field name="state" widget="badge" 
-                       decoration-success="state=='returned'" 
-                       decoration-warning="state=='borrowed'" 
-                       decoration-danger="state=='overdue'"/>
+                       decoration-success="state == 'returned'" 
+                       decoration-warning="state == 'borrowed'" 
+                       decoration-danger="state == 'overdue'"/>
             </tree>
         </field>
     </record>
 
+    <!-- Form View -->
     <record id="borrow_order_view_form" model="ir.ui.view">
         <field name="name">borrow.order.form</field>
         <field name="model">borrow.order</field>
@@ -25,44 +32,68 @@
             <form string="Peminjaman Buku">
                 <header>
                     <button name="action_borrow"
-                            string="Pinjam"
+                            string="Borrow"
                             type="object"
                             class="oe_highlight"
-                            invisible="state != 'draft'"/>
+                            modifiers="{'invisible': [('state','!=','draft')]}"/>
 
                     <button name="action_return"
-                            string="Kembalikan"
+                            string="Return"
                             type="object"
                             class="oe_highlight"
-                            invisible="state != 'borrowed'"/>
+                            modifiers="{'invisible': [('state','!=','borrowed')]}"/>
 
                     <button name="action_draft"
                             string="Set to Draft"
                             type="object"
-                            invisible="state not in ('returned', 'cancel')"/>
+                            modifiers="{'invisible': [('state','not in',['returned','cancel'])]}"/>
 
-                    <field name="state" widget="statusbar" statusbar_visible="draft,borrowed,returned"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,borrowed,returned,overdue"/>
                 </header>
+
                 <sheet>
+                    <!-- Smart Button Box -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-invoice"
+                                modifiers="{'invisible': [('invoice_id','=',False)]}">
+                            <field name="invoice_id" invisible="1"/>
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Invoice</span>
+                            </div>
+                        </button>
+                    </div>
+
                     <div class="oe_title">
                         <h1><field name="name"/></h1>
                     </div>
                     <group>
                         <group>
                             <field name="partner_id"/>
-                            <field name="book_id"/> 
+                            <field name="book_id"/>
                         </group>
                         <group>
                             <field name="borrow_date"/>
+                            <field name="due_date"/> 
                             <field name="return_date"/>
                             <field name="duration_days"/>
                         </group>
+                    </group>
+
+                    <group string="Informasi Denda">
+                        <field name="late_days"/>
+                        <field name="penalty_rule_id"/>
+                        <field name="penalty_per_day" readonly="1"/>
+                        <field name="penalty_amount" readonly="1"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <!-- Search View -->
     <record id="borrow_order_view_search" model="ir.ui.view">
         <field name="name">borrow.order.search</field>
         <field name="model">borrow.order</field>
@@ -71,13 +102,16 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="book_id"/>
+                <field name="penalty_rule_id"/>
                 <field name="state"/>
                 <filter name="borrowed" string="Dipinjam" domain="[('state','=','borrowed')]"/>
                 <filter name="returned" string="Dikembalikan" domain="[('state','=','returned')]"/>
+                <filter name="overdue" string="Terlambat" domain="[('state','=','overdue')]"/>
             </search>
         </field>
     </record>
 
+    <!-- Action -->
     <record id="borrow_order_action" model="ir.actions.act_window">
         <field name="name">Borrow Orders</field>
         <field name="res_model">borrow.order</field>

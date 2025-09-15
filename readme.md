@@ -27,3 +27,6 @@ python C:\odoo17\odoo-bin -c C:\odoo17\odoo.conf -d odoo17 --log-level=debug
 1. Membuat Module Peminjaman Buku 
 2. Dengan fungsi tidak bisa minjam sebelum mengembalikan buku sebelumnya 
 3. Dan ada stok buku nya yang tersedia jika buku nya tidak tersedia stok nya maka tidak muncul nama buku tersebut
+
+15/09/2025
+Membuat smart button invoice lalu mengubah logika penalty rules per range rules
