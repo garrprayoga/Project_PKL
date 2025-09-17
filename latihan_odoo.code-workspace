@@ -1,11 +1,3 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../odoo17"
-		}
-	],
-	"settings": {}
+	"folders": []
 }

@@ -30,3 +30,6 @@ python C:\odoo17\odoo-bin -c C:\odoo17\odoo.conf -d odoo17 --log-level=debug
 
 15/09/2025
 Membuat smart button invoice lalu mengubah logika penalty rules per range rules
+
+17/09/2025
+Menambahkan fitur report atau print outnya dari peminjaman

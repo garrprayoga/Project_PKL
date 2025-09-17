@@ -16,6 +16,7 @@
         'views/borrow_order_view.xml',
         'views/book_data_view.xml',
         'views/library_penalty_rule_view.xml',
+        'report/borrow_order_report.xml',
         'views/menuitems.xml',
         
     ],
