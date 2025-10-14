@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_teacher_tree" model="ir.ui.view">
+        <field name="name">laptop.teacher.tree</field>
+        <field name="model">laptop.teacher</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="subject"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_teacher_form" model="ir.ui.view">
+        <field name="name">laptop.teacher.form</field>
+        <field name="model">laptop.teacher</field>
+        <field name="arch" type="xml">
+            <form string="Guru Mata Pelajaran">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="subject"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_teacher" model="ir.actions.act_window">
+        <field name="name">Guru Mata Pelajaran</field>
+        <field name="res_model">laptop.teacher</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

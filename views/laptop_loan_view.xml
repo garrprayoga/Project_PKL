@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_laptop_loan_tree" model="ir.ui.view">
+        <field name="name">laptop.loan.tree</field>
+        <field name="model">laptop.loan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="class_room_id"/>
+                <field name="major_id"/>
+                <field name="loan_purpose"/>
+                <field name="teacher_id"/>
+                <field name="other_reason"/>
+                <field name="quantity"/>
+                <field name="loan_datetime"/>
+                <field name="return_datetime"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'loaned'"
+                       decoration-success="state == 'returned'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_laptop_loan_form" model="ir.ui.view">
+        <field name="name">laptop.loan.form</field>
+        <field name="model">laptop.loan</field>
+        <field name="arch" type="xml">
+            <form string="Peminjaman Laptop">
+                <header>
+                    <button name="action_confirm" type="object"
+                            string="Konfirmasi Peminjaman"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_return" type="object"
+                            string="Tandai Dikembalikan"
+                            class="btn-success"
+                            invisible="state != 'loaned'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,loaned,returned"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="student_id"/>
+                        <field name="class_room_id" readonly="1"/>
+                        <field name="major_id" readonly="1"/>
+                        <field name="quantity"/>
+                    </group>
+
+                    <group string="Tujuan Peminjaman">
+                        <!-- hanya 1x loan_purpose -->
+                        <field name="loan_purpose" required="1"/>
+
+                        <!-- Guru muncul hanya jika KBM -->
+                        <field name="teacher_id"
+                               modifiers='{"invisible": [["loan_purpose", "!=", "study"]],
+                                           "required": [["loan_purpose", "=", "study"]]}'/>
+
+                        <!-- Keterangan lainnya muncul hanya jika lainnya -->
+                        <field name="other_reason"
+                               modifiers='{"invisible": [["loan_purpose", "!=", "other"]],
+                                           "required": [["loan_purpose", "=", "other"]]}'/>
+                    </group>
+
+                    <group>
+                        <field name="loan_datetime"/>
+                        <field name="return_datetime"/>
+                        <field name="notes"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Detail Laptop">
+                            <field name="loan_line_ids">
+                                <tree editable="bottom">
+                                    <field name="laptop_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_laptop_loan" model="ir.actions.act_window">
+        <field name="name">Peminjaman Laptop</field>
+        <field name="res_model">laptop.loan</field> 
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

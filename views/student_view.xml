@@ -1,0 +1,41 @@
+<odoo>
+    <record id="view_student_tree" model="ir.ui.view">
+        <field name="name">laptop.student.tree</field>
+        <field name="model">laptop.student</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="nis"/>
+                <field name="name"/>
+                <field name="class_room_id"/>
+                <field name="major_id"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_student_form" model="ir.ui.view">
+        <field name="name">laptop.student.form</field>
+        <field name="model">laptop.student</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="nis"/>
+                        <field name="name"/>
+                        <field name="class_room_id"/>
+                        <field name="major_id" readonly="1"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_student" model="ir.actions.act_window">
+        <field name="name">Siswa</field>
+        <field name="res_model">laptop.student</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

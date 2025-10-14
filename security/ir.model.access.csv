@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_major_user,access_major_user,model_laptop_major,,1,1,1,1
+access_class_room_user,access_class_room_user,model_laptop_class_room,,1,1,1,1
+access_student_user,access_student_user,model_laptop_student,,1,1,1,1
+access_laptop_loan_user,access_laptop_loan_user,model_laptop_loan,,1,1,1,1
+access_laptop_loan_line_user,access_laptop_loan_line_user,model_laptop_loan_line,,1,1,1,1
+access_teacher_user,access_teacher_user,model_laptop_teacher,,1,1,1,1

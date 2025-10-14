@@ -1,0 +1,16 @@
+<odoo>
+    <!-- Menu Utama -->
+    <menuitem id="menu_laptop_management_root" name="Manajemen Laptop" sequence="1"/>
+
+    <!-- Data Siswa -->
+    <menuitem id="menu_student_management" name="Data Siswa" parent="menu_laptop_management_root" sequence="2"/>
+    <menuitem id="menu_major" name="Jurusan" parent="menu_student_management" action="action_major"/>
+    <menuitem id="menu_class" name="Kelas" parent="menu_student_management" action="action_class_room"/>
+    <menuitem id="menu_student" name="Siswa" parent="menu_student_management" action="action_student"/>
+
+    <!-- Peminjaman Laptop -->
+    <menuitem id="menu_loan_management" name="Peminjaman Laptop" parent="menu_laptop_management_root" action="action_laptop_loan" sequence="3"/>
+
+    <!-- Guru Mata Pelajaran -->
+    <menuitem id="menu_teacher_root" name="Guru Mata Pelajaran" parent="menu_laptop_management_root" action="action_teacher" sequence="4"/>
+</odoo>
