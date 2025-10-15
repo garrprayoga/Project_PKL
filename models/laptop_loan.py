@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
+
 class LaptopLoan(models.Model):
     _name = 'laptop.loan'
     _description = 'Peminjaman Laptop'
@@ -18,16 +19,12 @@ class LaptopLoan(models.Model):
     class_room_id = fields.Many2one(related='student_id.class_room_id', string="Kelas", store=True)
     major_id = fields.Many2one(related='student_id.major_id', string="Jurusan", store=True)
 
-    # 🔹 Tujuan peminjaman
     loan_purpose = fields.Selection([
         ('study', 'KBM'),
         ('other', 'Lainnya')
     ], string="Tujuan Peminjaman", required=True)
 
-    # 🔹 Guru mata pelajaran (muncul hanya jika tujuan belajar)
     teacher_id = fields.Many2one('laptop.teacher', string="Guru Mata Pelajaran")
-
-    # 🔹 Keterangan lain (muncul hanya jika tujuan lainnya)
     other_reason = fields.Char(string="Keterangan Lainnya")
 
     quantity = fields.Integer(string="Jumlah Laptop", required=True, default=1)
@@ -43,7 +40,16 @@ class LaptopLoan(models.Model):
         ('returned', 'Dikembalikan')
     ], string="Status", default='draft', required=True)
 
-    # Generate nomor otomatis
+    # =============== Dynamic UI ===============
+    @api.onchange('loan_purpose')
+    def _onchange_loan_purpose(self):
+        """Kosongkan field yang tidak relevan saat pilihan berubah"""
+        if self.loan_purpose == 'study':
+            self.other_reason = False
+        elif self.loan_purpose == 'other':
+            self.teacher_id = False
+
+    # =============== Nomor otomatis ===============
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
@@ -52,19 +58,16 @@ class LaptopLoan(models.Model):
         record._generate_laptop_lines()
         return record
 
-    # Jika jumlah laptop berubah, sesuaikan detail
     def write(self, vals):
         res = super(LaptopLoan, self).write(vals)
         if 'quantity' in vals:
             self._generate_laptop_lines()
         return res
 
-    # Otomatis menyesuaikan detail laptop dengan jumlah yang diinput
     def _generate_laptop_lines(self):
         for loan in self:
             current = len(loan.loan_line_ids)
             desired = loan.quantity
-
             if desired > current:
                 for i in range(current + 1, desired + 1):
                     self.env['laptop.loan.line'].create({
@@ -75,7 +78,7 @@ class LaptopLoan(models.Model):
                 lines_to_remove = loan.loan_line_ids[-(current - desired):]
                 lines_to_remove.unlink()
 
-    # 🔸 Validasi tambahan: tujuan pinjam
+    # =============== Validasi ===============
     @api.constrains('loan_purpose', 'teacher_id', 'other_reason')
     def _check_purpose_fields(self):
         for record in self:
@@ -84,7 +87,6 @@ class LaptopLoan(models.Model):
             if record.loan_purpose == 'other' and not record.other_reason:
                 raise ValidationError("Harap isi keterangan lainnya jika tujuan peminjaman bukan KBM.")
 
-    # 🔸 Validasi kelas yang masih punya pinjaman aktif
     @api.constrains('class_room_id', 'state')
     def _check_borrower_loans(self):
         for loan in self:
@@ -99,14 +101,13 @@ class LaptopLoan(models.Model):
                         f"Kelas {loan.class_room_id.name} masih punya pinjaman yang belum dikembalikan!"
                     )
 
-    # 🔸 Validasi waktu pengembalian
     @api.constrains('loan_datetime', 'return_datetime')
     def _check_return_after_loan(self):
         for record in self:
             if record.return_datetime and record.return_datetime < record.loan_datetime:
                 raise ValidationError("Waktu kembali tidak boleh lebih awal dari waktu pinjam.")
 
-    # Konfirmasi peminjaman
+    # =============== Aksi Tombol ===============
     def action_confirm(self):
         for loan in self:
             if loan.state == 'draft':
@@ -115,7 +116,6 @@ class LaptopLoan(models.Model):
                 if not loan.loan_line_ids:
                     loan._generate_laptop_lines()
 
-    # Tandai pengembalian
     def action_return(self):
         for loan in self:
             if loan.state == 'loaned':
@@ -130,5 +130,3 @@ class LaptopLoanLine(models.Model):
 
     loan_id = fields.Many2one('laptop.loan', string="Peminjaman", ondelete='cascade')
     laptop_name = fields.Char(string="Nomor Laptop", required=True)
-
-

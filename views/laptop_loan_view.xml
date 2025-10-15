@@ -52,18 +52,17 @@
                     </group>
 
                     <group string="Tujuan Peminjaman">
-                        <!-- hanya 1x loan_purpose -->
                         <field name="loan_purpose" required="1"/>
 
-                        <!-- Guru muncul hanya jika KBM -->
+                        <!-- Guru hanya muncul jika KBM -->
                         <field name="teacher_id"
-                               modifiers='{"invisible": [["loan_purpose", "!=", "study"]],
-                                           "required": [["loan_purpose", "=", "study"]]}'/>
+                               invisible="loan_purpose != 'study'"
+                               required="loan_purpose == 'study'"/>
 
-                        <!-- Keterangan lainnya muncul hanya jika lainnya -->
+                        <!-- Keterangan lainnya hanya muncul jika Lainnya -->
                         <field name="other_reason"
-                               modifiers='{"invisible": [["loan_purpose", "!=", "other"]],
-                                           "required": [["loan_purpose", "=", "other"]]}'/>
+                               invisible="loan_purpose != 'other'"
+                               required="loan_purpose == 'other'"/>
                     </group>
 
                     <group>
@@ -89,7 +88,7 @@
     <!-- Action -->
     <record id="action_laptop_loan" model="ir.actions.act_window">
         <field name="name">Peminjaman Laptop</field>
-        <field name="res_model">laptop.loan</field> 
+        <field name="res_model">laptop.loan</field>
         <field name="view_mode">tree,form</field>
     </record>
 </odoo>
