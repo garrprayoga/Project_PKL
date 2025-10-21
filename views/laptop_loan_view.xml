@@ -9,7 +9,6 @@
                 <field name="name"/>
                 <field name="student_id"/>
                 <field name="class_room_id"/>
-                <field name="major_id"/>
                 <field name="loan_purpose"/>
                 <field name="teacher_id"/>
                 <field name="other_reason"/>
@@ -44,31 +43,39 @@
 
                 <sheet>
                     <group>
-                        <field name="name" readonly="1"/>
-                        <field name="student_id"/>
-                        <field name="class_room_id" readonly="1"/>
-                        <field name="major_id" readonly="1"/>
-                        <field name="quantity"/>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="student_id"/>
+                            <field name="class_room_id" readonly="1"/>
+                            <field name="major_id" readonly="1"/>
+                            <field name="quantity"/>
+                        </group>
+
+                        <group string="Tujuan Peminjaman">
+                            <field name="loan_purpose" required="1"/>
+                            <field name="teacher_id"
+                                   invisible="loan_purpose != 'study'"
+                                   required="loan_purpose == 'study'"/>
+                            <field name="other_reason"
+                                   invisible="loan_purpose != 'other'"
+                                   required="loan_purpose == 'other'"/>
+                        </group>
                     </group>
 
-                    <group string="Tujuan Peminjaman">
-                        <field name="loan_purpose" required="1"/>
-
-                        <!-- Guru hanya muncul jika KBM -->
-                        <field name="teacher_id"
-                               invisible="loan_purpose != 'study'"
-                               required="loan_purpose == 'study'"/>
-
-                        <!-- Keterangan lainnya hanya muncul jika Lainnya -->
-                        <field name="other_reason"
-                               invisible="loan_purpose != 'other'"
-                               required="loan_purpose == 'other'"/>
-                    </group>
-
-                    <group>
+                    <group string="Informasi Waktu">
                         <field name="loan_datetime"/>
                         <field name="return_datetime"/>
+                    </group>
+
+                    <group string="Catatan">
                         <field name="notes"/>
+                    </group>
+
+                    <separator string="Status Laptop" colspan="2"/>
+                    <group>
+                        <field name="total_laptops" readonly="1"/>
+                        <field name="borrowed_laptops" readonly="1"/>
+                        <field name="available_laptops" readonly="1"/>
                     </group>
 
                     <notebook>
@@ -83,6 +90,21 @@
                 </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="view_laptop_loan_search" model="ir.ui.view">
+        <field name="name">laptop.loan.search</field>
+        <field name="model">laptop.loan</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="class_room_id"/>
+                <field name="major_id"/>
+                <field name="teacher_id"/>
+                <field name="state"/>
+            </search>
+        </field>    
     </record>
 
     <!-- Action -->

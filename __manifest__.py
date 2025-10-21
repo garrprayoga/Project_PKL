@@ -16,6 +16,7 @@ Modul untuk mengelola data siswa, jurusan, kelas, dan peminjaman laptop.
         'views/student_view.xml',
         'views/laptop_loan_view.xml',
         'views/teacher_view.xml',
+        'views/res_config_settings_view.xml',
         'views/menuitem.xml',
     ],
     'application': True,

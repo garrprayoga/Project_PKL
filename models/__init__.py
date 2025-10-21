@@ -3,3 +3,4 @@ from . import class_room
 from . import student
 from . import laptop_loan
 from . import teacher
+from . import res_config_settings

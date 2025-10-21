@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_laptop" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.laptop</field>
+        <field name="model">res.config.settings</field>
+        <!-- Di Odoo 17, gunakan ID ini -->
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Fallback XPath universal -->
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" string="Manajemen Laptop">
+                    <h2>Pengaturan Laptop</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6">
+                            <field name="total_laptops"/>
+                            <p class="text-muted">
+                                Tentukan jumlah total laptop yang dimiliki sekolah.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
