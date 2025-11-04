@@ -1,0 +1,11 @@
+<odoo>
+  <template id="borrow_success_template" name="Borrow Success">
+    <t t-call="website.layout">
+      <div class="container mt-5 text-center">
+        <h2>✅ Peminjaman berhasil dikirim!</h2>
+        <p>Terima kasih telah mengisi form peminjaman.</p>
+        <a href="/form/peminjaman" class="btn btn-secondary mt-3">Kembali ke Form</a>
+      </div>
+    </t>
+  </template>
+</odoo>

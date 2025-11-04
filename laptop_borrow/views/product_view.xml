@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_form_inherit_laptop" model="ir.ui.view">
+        <field name="name">product.template.view.form.inherit.laptop</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="Laptop Info">
+                    <field name="is_laptop"/>
+                </group>
+            </sheet>
+        </field>
+    </record>
+</odoo>

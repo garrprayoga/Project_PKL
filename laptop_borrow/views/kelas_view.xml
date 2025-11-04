@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+        <record id="view_kelas_form" model="ir.ui.view">
+            <field name="name">kelas.form</field>
+            <field name="model">kelas</field>
+            <field name="arch" type="xml">
+                <form string="Data Kelas">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="status_pinjam"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Daftar Siswa">
+                                <field name="student_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_kelas_tree" model="ir.ui.view">
+            <field name="name">kelas.tree</field>
+            <field name="model">kelas</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Kelas">
+                    <field name="name"/>
+                    <field name="status_pinjam"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_kelas" model="ir.actions.act_window">
+            <field name="name">Data Kelas</field>
+            <field name="res_model">kelas</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_kelas_root" name="Kelas"/>
+        <menuitem id="menu_kelas_sub" name="Data Kelas" parent="menu_kelas_root" action="action_kelas"/>
+    </data>
+</odoo>

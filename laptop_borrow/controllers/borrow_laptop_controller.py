@@ -1,0 +1,76 @@
+from odoo import http
+from odoo.http import request
+
+class BorrowLaptopController(http.Controller):
+
+    # --- tampilkan form utama ---
+    @http.route('/form/peminjaman', type='http', auth='public', website=True)
+    def borrow_form(self, **kwargs):
+        kelas = request.env['kelas'].sudo().search([])
+        laptop = request.env['product.template'].sudo().search([
+            ('is_laptop', '=', True),
+            ('qty_available', '>', 0)
+        ])
+        return request.render('laptop_borrow.borrow_form_template', {
+            'kelas': kelas,
+            'laptop': laptop,
+        })
+
+    # --- ambil daftar siswa berdasarkan kelas ---
+    @http.route('/get_students_by_class', type='json', auth='public')
+    def get_students_by_class(self, class_id=None):
+        if not class_id:
+            return []
+
+        # ambil semua siswa dengan field class_id yang sesuai
+        students = request.env['res.partner'].sudo().search([
+            ('is_student', '=', True),
+            ('class_id', '=', int(class_id))
+        ])
+        return [{'id': s.id, 'name': s.name} for s in students]
+
+    # --- submit form peminjaman ---
+    @http.route('/form/peminjaman/submit', type='http', auth='public', website=True, methods=['POST'])
+    def borrow_form_submit(self, **post):
+        borrower_id = post.get('borrower_id')
+        class_id = post.get('class_id')
+        laptop_id = post.get('laptop_id')
+        borrow_date = post.get('borrow_date')
+        borrow_time = post.get('borrow_time')
+        tujuan_peminjaman = post.get('tujuan_peminjaman')
+        guru_mapel = post.get('guru_mapel')
+        keterangan = post.get('keterangan')
+        jumlah_pinjam = post.get('jumlah_pinjam')
+        petugas_jaga = post.get('petugas_jaga')
+
+        # kalau borrower_id belum terdaftar → buat baru di res.partner
+        if borrower_id.isdigit():
+            borrower = request.env['res.partner'].sudo().browse(int(borrower_id))
+        else:
+            borrower = request.env['res.partner'].sudo().create({
+                'name': borrower_id,
+                'is_student': True,
+                'class_id': int(class_id)
+            })
+
+        # buat record utama peminjaman
+        borrow_record = request.env['borrow.laptop'].sudo().create({
+            'borrower_id': borrower.id,
+            'class_id': class_id,
+            'borrow_date': borrow_date,
+            'borrow_time': borrow_time,
+            'tujuan_peminjaman': tujuan_peminjaman,
+            'guru_mapel': guru_mapel,
+            'keterangan': keterangan,
+            'jumlah_pinjam': jumlah_pinjam,
+            'petugas_jaga': petugas_jaga,
+            'status': 'dipinjam',
+        })
+
+        # buat detail laptop
+        request.env['borrow.laptop.line'].sudo().create({
+            'borrow_id': borrow_record.id,
+            'laptop_id': int(laptop_id),
+        })
+
+        return request.render('laptop_borrow.borrow_success_template')

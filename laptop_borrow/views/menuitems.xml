@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_laptop_root"
+              name="Laptop Borrow System"
+              sequence="1"/>
+
+    <menuitem id="menu_kelas"
+              name="Data Kelas"
+              parent="menu_laptop_root"
+              action="action_kelas"/>
+
+    <menuitem id="menu_borrow_laptop"
+              name="Peminjaman Laptop"
+              parent="menu_laptop_root"
+              action="action_borrow_laptop"/>
+
+    
+    <menuitem id="menu_return_laptop"
+              name="Pengembalian Laptop"
+              parent="menu_laptop_root"
+              action="action_return_laptop"
+              sequence="20"/>
+</odoo>

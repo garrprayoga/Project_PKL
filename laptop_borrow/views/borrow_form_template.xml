@@ -1,0 +1,92 @@
+<odoo>
+  <template id="borrow_form_template" name="Borrow Laptop Form">
+    <t t-call="website.layout">
+      <t t-call-assets="web.assets_frontend"/>
+      <t t-call-assets="laptop_borrow.assets_frontend"/>
+
+      <div class="container mt-5 mb-5">
+        <h2>Form Peminjaman Laptop</h2>
+        <form id="borrow-form" action="/form/peminjaman/submit" method="post">
+
+          <!-- KELAS -->
+          <div class="form-group mt-2">
+            <label>Kelas</label>
+            <select id="class_id" name="class_id" class="form-control" required="required">
+              <option value="">-- Pilih Kelas --</option>
+              <t t-foreach="kelas" t-as="k">
+                <option t-att-value="k.id"><t t-esc="k.name"/></option>
+              </t>
+            </select>
+          </div>
+
+          <!-- NAMA SISWA -->
+          <div class="form-group mt-2">
+            <label>Nama Peminjam</label>
+            <select id="borrower_id" name="borrower_id" class="form-control" required="required">
+              <option value="">-- Pilih Nama --</option>
+            </select>
+            <small class="form-text text-muted">Jika nama belum ada, ketik manual nanti otomatis tersimpan.</small>
+          </div>
+
+          <!-- LAPTOP -->
+          <div class="form-group mt-2">
+            <label>Laptop</label>
+            <select name="laptop_id" class="form-control" required="required">
+              <t t-foreach="laptop" t-as="l">
+                <option t-att-value="l.id"><t t-esc="l.name"/></option>
+              </t>
+            </select>
+          </div>
+
+          <!-- TUJUAN -->
+          <div class="form-group mt-2">
+            <label>Tujuan Peminjaman</label>
+            <select name="tujuan_peminjaman" id="tujuan_peminjaman" class="form-control" required="required">
+              <option value="">-- Pilih Tujuan --</option>
+              <option value="kbm">KBM</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <!-- GURU MAPEL -->
+          <div class="form-group mt-2" id="mapel_field" style="display:none;">
+            <label>Guru Mapel</label>
+            <input type="text" name="guru_mapel" class="form-control"/>
+          </div>
+
+          <!-- KETERANGAN -->
+          <div class="form-group mt-2" id="keterangan_field" style="display:none;">
+            <label>Keterangan</label>
+            <textarea name="keterangan" class="form-control"></textarea>
+          </div>
+
+          <!-- JUMLAH -->
+          <div class="form-group mt-2">
+            <label>Jumlah Pinjam</label>
+            <input type="number" name="jumlah_pinjam" class="form-control" value="1" min="1"/>
+          </div>
+
+          <!-- PETUGAS -->
+          <div class="form-group mt-2">
+            <label>Petugas Bertugas</label>
+            <input type="text" name="petugas_jaga" class="form-control"/>
+          </div>
+
+          <!-- TANGGAL -->
+          <div class="form-group mt-2">
+            <label>Tanggal Peminjaman</label>
+            <input type="date" name="borrow_date" class="form-control" required="required"/>
+          </div>
+
+          <!-- JAM -->
+          <div class="form-group mt-2">
+            <label>Jam Peminjaman</label>
+            <input type="time" name="borrow_time" class="form-control"/>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Kirim</button>
+        </form>
+      </div>
+    </t>
+  </template>
+</odoo>

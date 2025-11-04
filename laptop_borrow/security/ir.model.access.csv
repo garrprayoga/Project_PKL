@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_borrow_laptop,borrow.laptop,model_borrow_laptop,,1,1,1,1
+access_borrow_laptop_line,borrow.laptop_line,model_borrow_laptop_line,,1,1,1,1
+access_kelas,kelas,model_kelas,,1,1,1,1
+access_return_laptop,return.laptop,model_return_laptop,,1,1,1,1
