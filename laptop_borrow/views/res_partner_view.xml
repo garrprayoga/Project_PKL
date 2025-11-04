@@ -1,0 +1,16 @@
+<odoo>
+    <!-- Form View -->
+    <record id="view_res_partner_form_inherit_student" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.student</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="Student Info">
+                    <field name="is_student"/>
+                </group>
+            </sheet>    
+        </field>
+    </record>
+
+</odoo>

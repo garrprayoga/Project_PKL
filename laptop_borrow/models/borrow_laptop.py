@@ -50,8 +50,7 @@ class BorrowLaptop(models.Model):
     )
 
     petugas_jaga = fields.Char(string="Petugas Bertugas")
-    borrow_date = fields.Date(string="Tanggal Peminjaman", default=fields.Date.today)
-    borrow_time = fields.Float(string="Jam Peminjaman")
+    borrow_date = fields.Datetime(string="Waktu Pinjam", required=True, default=fields.Datetime.now)
 
     status = fields.Selection([
         ('draft', 'Draft'),

@@ -21,6 +21,7 @@
         'views/menuitems.xml',
         'views/borrow_form_template.xml',
         'views/borrow_success_template.xml',
+        'views/res_partner_view.xml',
     ],
     'assets': {
         'web.assets_frontend': [
