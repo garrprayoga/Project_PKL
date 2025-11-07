@@ -25,7 +25,6 @@
             <select id="borrower_id" name="borrower_id" class="form-control" required="required">
               <option value="">-- Pilih Nama --</option>
             </select>
-            <small class="form-text text-muted">Jika nama belum ada, ketik manual nanti otomatis tersimpan.</small>
           </div>
 
           <!-- LAPTOP -->
@@ -50,7 +49,7 @@
 
           <!-- GURU MAPEL -->
           <div class="form-group mt-2" id="mapel_field" style="display:none;">
-            <label>Guru Mapel</label>
+            <label>Guru Mata Pelajaran</label>
             <input type="text" name="guru_mapel" class="form-control"/>
           </div>
 
@@ -62,13 +61,13 @@
 
           <!-- JUMLAH -->
           <div class="form-group mt-2">
-            <label>Jumlah Pinjam</label>
+            <label>Jumlah Laptop</label>
             <input type="number" name="jumlah_pinjam" class="form-control" value="1" min="1"/>
           </div>
 
           <!-- PETUGAS -->
           <div class="form-group mt-2">
-            <label>Petugas Bertugas</label>
+            <label>Petugas</label>
             <input type="text" name="petugas_jaga" class="form-control"/>
           </div>
 
@@ -78,15 +77,73 @@
             <input type="date" name="borrow_date" class="form-control" required="required"/>
           </div>
 
-          <!-- JAM -->
-          <div class="form-group mt-2">
-            <label>Jam Peminjaman</label>
-            <input type="time" name="borrow_time" class="form-control"/>
-          </div>
-
           <button type="submit" class="btn btn-primary mt-3">Kirim</button>
         </form>
       </div>
+
+      <!-- ===================== SCRIPT SECTION ===================== -->
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const classSelect = document.getElementById('class_id');
+          const studentSelect = document.getElementById('borrower_id');
+          const tujuanSelect = document.getElementById('tujuan_peminjaman');
+          const mapelField = document.getElementById('mapel_field');
+          const ketField = document.getElementById('keterangan_field');
+
+          // --- AJAX load siswa berdasarkan kelas ---
+          classSelect.addEventListener('change', async function() {
+              const classId = this.value;
+              studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
+
+              if (classId) {
+                  try {
+                      const response = await fetch('/get_students_by_class', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ class_id: classId })
+                      });
+
+                      const students = await response.json();
+                      studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+
+                      if (students.length > 0) {
+                          students.forEach(s => {
+                              const opt = document.createElement('option');
+                              opt.value = s.id;
+                              opt.textContent = s.name;
+                              studentSelect.appendChild(opt);
+                          });
+                      } else {
+                          const opt = document.createElement('option');
+                          opt.textContent = 'Tidak ada siswa di kelas ini';
+                          studentSelect.appendChild(opt);
+                      }
+
+                  } catch (err) {
+                      console.error('Error memuat siswa:', err);
+                      studentSelect.innerHTML = '<option value="">(Gagal memuat data)</option>';
+                  }
+
+              } else {
+                  studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+              }
+          });
+
+          // --- tampilkan field tambahan sesuai tujuan ---
+          tujuanSelect.addEventListener('change', function() {
+              if (this.value === 'kbm') {
+                  mapelField.style.display = 'block';
+                  ketField.style.display = 'none';
+              } else if (this.value === 'lainnya') {
+                  mapelField.style.display = 'none';
+                  ketField.style.display = 'block';
+              } else {
+                  mapelField.style.display = 'none';
+                  ketField.style.display = 'none';
+              }
+          });
+      });
+      </script>
     </t>
   </template>
 </odoo>

@@ -8,6 +8,7 @@
             <sheet position="inside">
                 <group string="Student Info">
                     <field name="is_student"/>
+                    <field name="class_id" />
                 </group>
             </sheet>    
         </field>
