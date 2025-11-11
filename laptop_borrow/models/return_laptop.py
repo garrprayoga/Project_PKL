@@ -25,13 +25,9 @@ class ReturnLaptop(models.Model):
         domain="[('borrower_id','=',borrower_id),('status','=','dipinjam')]"
     )
 
-    return_date = fields.Date(
+    return_date = fields.Datetime(
         string="Tanggal Pengembalian",
-        default=fields.Date.today
-    )
-
-    return_time = fields.Float(
-        string="Jam Pengembalian"
+        default=fields.Datetime.now
     )
 
     state = fields.Selection([

@@ -42,7 +42,7 @@
                         <page string="Daftar Laptop Dipinjam">
                             <field name="line_ids">
                                 <tree editable="bottom">
-                                    <field name="laptop_id"/>
+                                    <field name="laptop_serial_id"/>
                                 </tree>
                             </field>
                         </page>

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!-- ==========================
+       FORM PEMINJAMAN
+  =========================== -->
   <template id="borrow_form_template" name="Form Peminjaman Laptop">
     <t t-call="website.layout">
       <div class="container mt-5 mb-5">
-        <h2>Form Peminjaman Laptop</h2>
+        <h2 class="text-center mb-4">Form Peminjaman Laptop</h2>
         <form id="borrow-form" action="/form/peminjaman/submit" method="post">
           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
@@ -18,7 +21,7 @@
             </select>
           </div>
 
-          <!-- NAMA SISWA -->
+          <!-- SISWA -->
           <div class="form-group mt-2">
             <label>Nama Siswa</label>
             <select id="borrower_id" name="borrower_id" class="form-control" required="required">
@@ -51,24 +54,23 @@
           <!-- JUMLAH -->
           <div class="form-group mt-3">
             <label>Jumlah Laptop</label>
-            <input type="number" id="jumlah_pinjam" name="jumlah_pinjam" class="form-control" min="1" placeholder="Masukkan jumlah laptop yang ingin dipinjam" required="required"/>
+            <input type="number" id="jumlah_pinjam" name="jumlah_pinjam" class="form-control"
+                   min="1" placeholder="Masukkan jumlah laptop yang ingin dipinjam" required="required"/>
           </div>
 
-          <!-- LAPTOP -->
+          <!-- PILIH SERIAL -->
           <div class="form-group mt-3">
-            <label class="form-label fw-bold">Pilih Laptop</label>
+            <label class="form-label fw-bold">Pilih Laptop (Nomor Seri)</label>
             <div class="list-group">
-              <t t-foreach="laptop" t-as="l">
-                <t t-if="l.is_laptop">
-                  <label class="list-group-item d-flex align-items-center">
-                    <input type="checkbox"
-                           class="form-check-input me-2 laptop-checkbox"
-                           name="laptop_id"
-                           t-att-value="l.id"
-                           t-att-id="'laptop_' + str(l.id)" />
-                    <t t-esc="l.name"/>
-                  </label>
-                </t>
+              <t t-foreach="lots" t-as="lot">
+                <label class="list-group-item d-flex align-items-center">
+                  <input type="checkbox"
+                         class="form-check-input me-2 laptop-checkbox"
+                         name="lot_id"
+                         t-att-value="lot.id"
+                         t-att-id="'lot_' + str(lot.id)" />
+                  <t t-esc="lot.name"/>
+                </label>
               </t>
             </div>
           </div>
@@ -77,73 +79,88 @@
         </form>
       </div>
 
-      <!-- Script tambahan (AJAX + field toggle + limit checkbox) -->
+      <!-- ==========================
+           SCRIPT JS
+      =========================== -->
       <script>
       document.addEventListener('DOMContentLoaded', function() {
-          const classSelect = document.getElementById('class_id');
-          const studentSelect = document.getElementById('borrower_id');
-          const tujuanSelect = document.getElementById('tujuan_peminjaman');
-          const mapelField = document.getElementById('mapel_field');
-          const ketField = document.getElementById('keterangan_field');
-          const jumlahInput = document.getElementById('jumlah_pinjam');
-          const checkboxes = document.querySelectorAll('.laptop-checkbox');
+        const classSelect = document.getElementById('class_id');
+        const studentSelect = document.getElementById('borrower_id');
+        const tujuanSelect = document.getElementById('tujuan_peminjaman');
+        const mapelField = document.getElementById('mapel_field');
+        const ketField = document.getElementById('keterangan_field');
+        const jumlahInput = document.getElementById('jumlah_pinjam');
+        const checkboxes = document.querySelectorAll('.laptop-checkbox');
 
-          // 🔹 Load siswa by class
-          classSelect.addEventListener('change', async function() {
-              const classId = this.value;
-              studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
-              if (classId) {
-                  try {
-                      const response = await fetch('/get_students_by_class', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ class_id: classId })
-                      });
-                      const students = await response.json();
-                      studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-                      if (students.length > 0) {
-                          students.forEach(s => {
-                              const opt = document.createElement('option');
-                              opt.value = s.id;
-                              opt.textContent = s.name;
-                              studentSelect.appendChild(opt);
-                          });
-                      } else {
-                          studentSelect.innerHTML = '<option value="">(Tidak ada siswa)</option>';
-                      }
-                  } catch (err) {
-                      console.error('Error:', err);
-                      studentSelect.innerHTML = '<option value="">(Gagal memuat data)</option>';
-                  }
+        // 🔹 Load siswa by class (AJAX)
+        classSelect.addEventListener('change', async function() {
+          const classId = this.value;
+          studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
+          if (classId) {
+            try {
+              const response = await fetch('/get_students_by_class', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ class_id: classId })
+              });
+              const students = await response.json();
+              studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+              if (students.length > 0) {
+                students.forEach(s => {
+                  const opt = document.createElement('option');
+                  opt.value = s.id;
+                  opt.textContent = s.name;
+                  studentSelect.appendChild(opt);
+                });
               } else {
-                  studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+                studentSelect.innerHTML = '<option value="">(Tidak ada siswa)</option>';
               }
-          });
-
-          // 🔹 Toggle field berdasarkan tujuan
-          tujuanSelect.addEventListener('change', function() {
-              mapelField.style.display = this.value === 'kbm' ? 'block' : 'none';
-              ketField.style.display = this.value === 'lainnya' ? 'block' : 'none';
-          });
-
-          // 🔹 Batasi checkbox sesuai jumlah
-          function updateCheckboxLimit() {
-              const maxAllowed = parseInt(jumlahInput.value) || 0;
-              const checkedBoxes = document.querySelectorAll('.laptop-checkbox:checked');
-
-              if (checkedBoxes.length >= maxAllowed) {
-                  checkboxes.forEach(cb => {
-                      if (!cb.checked) cb.disabled = true;
-                  });
-              } else {
-                  checkboxes.forEach(cb => cb.disabled = false);
-              }
+            } catch (err) {
+              console.error('Error:', err);
+              studentSelect.innerHTML = '<option value="">(Gagal memuat data)</option>';
+            }
+          } else {
+            studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
           }
+        });
 
-          jumlahInput.addEventListener('input', updateCheckboxLimit);
-          checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxLimit));
+        // 🔹 Toggle field berdasarkan tujuan
+        tujuanSelect.addEventListener('change', function() {
+          mapelField.style.display = this.value === 'kbm' ? 'block' : 'none';
+          ketField.style.display = this.value === 'lainnya' ? 'block' : 'none';
+        });
+
+        // 🔹 Batasi jumlah checkbox sesuai input jumlah
+        function updateCheckboxLimit() {
+          const maxAllowed = parseInt(jumlahInput.value) || 0;
+          const checkedBoxes = document.querySelectorAll('.laptop-checkbox:checked');
+
+          if (checkedBoxes.length >= maxAllowed) {
+            checkboxes.forEach(cb => {
+              if (!cb.checked) cb.disabled = true;
+            });
+          } else {
+            checkboxes.forEach(cb => cb.disabled = false);
+          }
+        }
+
+        jumlahInput.addEventListener('input', updateCheckboxLimit);
+        checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxLimit));
       });
       </script>
+    </t>
+  </template>
+
+  <!-- ==========================
+       HALAMAN SUKSES
+  =========================== -->
+  <template id="borrow_success_template" name="Borrow Success">
+    <t t-call="website.layout">
+      <div class="container mt-5 text-center">
+        <h2>✅ Peminjaman berhasil dikirim!</h2>
+        <p>Terima kasih telah mengisi form peminjaman.</p>
+        <a href="/form/peminjaman" class="btn btn-secondary mt-3">Kembali ke Form</a>
+      </div>
     </t>
   </template>
 </odoo>

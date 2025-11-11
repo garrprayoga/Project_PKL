@@ -7,15 +7,26 @@ class BorrowLaptopController(http.Controller):
     @http.route('/form/peminjaman', type='http', auth='public', website=True)
     def borrow_form(self, **kwargs):
         kelas = request.env['kelas'].sudo().search([])
-        all_laptops = request.env['product.template'].sudo().search([('is_laptop', '=', True)])
-        borrowed_laptop_ids = request.env['borrow.laptop.line'].sudo().search([
+
+        # Cari produk template bernama "Laptop"
+        laptop_product = request.env['product.template'].sudo().search([('name', '=', 'Laptop')], limit=1)
+
+        # Ambil semua serial number (lot) dari produk tersebut
+        all_serials = request.env['stock.lot'].sudo().search([
+            ('product_id.product_tmpl_id', '=', laptop_product.id)
+        ])
+
+        # Ambil serial yang sedang dipinjam
+        borrowed_lot_ids = request.env['borrow.laptop.line'].sudo().search([
             ('borrow_id.status', '=', 'dipinjam')
-        ]).mapped('laptop_id.id')
-        available_laptops = all_laptops.filtered(lambda l: l.id not in borrowed_laptop_ids)
+        ]).mapped('laptop_serial_id.id')
+
+        # Filter hanya serial yang belum dipinjam
+        available_serials = all_serials.filtered(lambda l: l.id not in borrowed_lot_ids)
 
         return request.render('laptop_borrow.borrow_form_template', {
             'kelas': kelas,
-            'laptop': available_laptops,
+            'lots': available_serials,
         })
 
     @http.route('/get_students_by_class', type='http', auth='public', csrf=False)
@@ -46,12 +57,10 @@ class BorrowLaptopController(http.Controller):
         keterangan = post.get('keterangan')
         jumlah_pinjam = post.get('jumlah_pinjam')
 
-        laptop_ids = request.httprequest.form.getlist('laptop_id')
+        lot_ids = request.httprequest.form.getlist('lot_id')
 
-        # 🔹 Tanggal otomatis (waktu server)
         borrow_date = fields.Datetime.now()
 
-        # 🔹 Validasi siswa
         if borrower_id and borrower_id.isdigit():
             borrower = request.env['res.partner'].sudo().browse(int(borrower_id))
         else:
@@ -61,7 +70,6 @@ class BorrowLaptopController(http.Controller):
                 'class_id': int(class_id)
             })
 
-        # 🔹 Buat record utama
         borrow_record = request.env['borrow.laptop'].sudo().create({
             'borrower_id': borrower.id,
             'class_id': class_id,
@@ -73,11 +81,13 @@ class BorrowLaptopController(http.Controller):
             'status': 'dipinjam',
         })
 
-        # 🔹 Buat detail laptop
-        for laptop_id in laptop_ids:
+        for lot_id in lot_ids:
             request.env['borrow.laptop.line'].sudo().create({
                 'borrow_id': borrow_record.id,
-                'laptop_id': int(laptop_id),
+                'laptop_serial_id': int(lot_id),
             })
 
-        return request.render('laptop_borrow.borrow_success_template')
+        return request.render('laptop_borrow.borrow_success_template', {
+            'borrower_name': borrower.name,
+            'borrow_code': borrow_record.name,
+        })

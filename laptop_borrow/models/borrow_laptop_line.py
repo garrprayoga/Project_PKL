@@ -10,9 +10,9 @@ class BorrowLaptopLine(models.Model):
         ondelete='cascade'
     )
 
-    laptop_id = fields.Many2one(
-        'product.template',
-        string="Nomor Laptop",
+    laptop_serial_id = fields.Many2one(
+        'stock.lot',
+        string="Nomor Laptop (Serial)",
         required=True,
-        domain="[('is_laptop', '=', True)]"
+        domain="[('product_id.product_tmpl_id.is_laptop', '=', True)]"
     )

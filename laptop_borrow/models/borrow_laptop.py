@@ -49,7 +49,11 @@ class BorrowLaptop(models.Model):
         help="Masukkan jumlah laptop yang dipinjam."
     )
 
-    borrow_date = fields.Datetime(string="Waktu Pinjam", required=True, default=fields.Datetime.now)
+    borrow_date = fields.Datetime(
+        string="Waktu Pinjam",
+        required=True,
+        default=fields.Datetime.now
+    )
 
     status = fields.Selection([
         ('draft', 'Draft'),

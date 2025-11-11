@@ -20,7 +20,6 @@
                         <field name="borrower_id"/>
                         <field name="borrow_id"/>
                         <field name="return_date"/>
-                        <field name="return_time"/>
                     </group>
                 </sheet>
             </form>
@@ -36,7 +35,6 @@
                 <field name="borrower_id"/>
                 <field name="borrow_id"/>
                 <field name="return_date"/>
-                <field name="return_time"/>
                 <field name="state"/>
             </tree>
         </field>
