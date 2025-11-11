@@ -49,7 +49,6 @@ class BorrowLaptop(models.Model):
         help="Masukkan jumlah laptop yang dipinjam."
     )
 
-    petugas_jaga = fields.Char(string="Petugas Bertugas")
     borrow_date = fields.Datetime(string="Waktu Pinjam", required=True, default=fields.Datetime.now)
 
     status = fields.Selection([
@@ -58,7 +57,6 @@ class BorrowLaptop(models.Model):
         ('dikembalikan', 'Dikembalikan'),
     ], string="Status", default='draft', tracking=True)
 
-    # Hubungan ke tabel detail
     line_ids = fields.One2many(
         'borrow.laptop.line',
         'borrow_id',
@@ -107,10 +105,7 @@ class BorrowLaptop(models.Model):
 
     @api.onchange('tujuan_peminjaman')
     def _onchange_tujuan_peminjaman(self):
-        """Kosongkan field yang tidak relevan tanpa sembunyikan"""
         if self.tujuan_peminjaman == 'kbm':
             self.keterangan = False
         elif self.tujuan_peminjaman == 'lainnya':
             self.guru_mapel = False
-
-

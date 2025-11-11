@@ -5,6 +5,7 @@
       <div class="container mt-5 mb-5">
         <h2>Form Peminjaman Laptop</h2>
         <form id="borrow-form" action="/form/peminjaman/submit" method="post">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
           <!-- KELAS -->
           <div class="form-group mt-2">
@@ -70,12 +71,6 @@
                 </t>
               </t>
             </div>
-          </div>
-
-          <!-- PETUGAS -->
-          <div class="form-group mt-2">
-            <label>Petugas</label>
-            <input type="text" name="petugas_jaga" class="form-control"/>
           </div>
 
           <button type="submit" class="btn btn-primary mt-3">Kirim</button>

@@ -21,7 +21,6 @@
                         <field name="borrow_id"/>
                         <field name="return_date"/>
                         <field name="return_time"/>
-                        <field name="petugas_jaga"/>
                     </group>
                 </sheet>
             </form>
@@ -38,7 +37,6 @@
                 <field name="borrow_id"/>
                 <field name="return_date"/>
                 <field name="return_time"/>
-                <field name="petugas_jaga"/>
                 <field name="state"/>
             </tree>
         </field>

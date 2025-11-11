@@ -25,9 +25,14 @@ class ReturnLaptop(models.Model):
         domain="[('borrower_id','=',borrower_id),('status','=','dipinjam')]"
     )
 
-    return_date = fields.Date(string="Tanggal Pengembalian", default=fields.Date.today)
-    return_time = fields.Float(string="Jam Pengembalian")
-    petugas_jaga = fields.Char(string="Petugas Pengembalian")
+    return_date = fields.Date(
+        string="Tanggal Pengembalian",
+        default=fields.Date.today
+    )
+
+    return_time = fields.Float(
+        string="Jam Pengembalian"
+    )
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -35,7 +40,7 @@ class ReturnLaptop(models.Model):
     ], string="Status", default='draft', tracking=True)
 
     def action_confirm_return(self):
-        """Mengubah status peminjaman jadi dikembalikan"""
+        """Ubah status peminjaman jadi dikembalikan"""
         for rec in self:
             if rec.borrow_id.status != 'dipinjam':
                 raise UserError("Peminjaman ini sudah dikembalikan atau belum valid.")

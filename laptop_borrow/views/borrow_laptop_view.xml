@@ -32,7 +32,6 @@
                     <group string="Detail Peminjaman">
                         <group>
                             <field name="jumlah_pinjam"/>
-                            <field name="petugas_jaga"/>
                         </group>
                         <group>
                             <field name="borrow_date"/>
