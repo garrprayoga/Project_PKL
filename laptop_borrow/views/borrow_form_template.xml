@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <!-- ==========================
-       FORM PEMINJAMAN
-  =========================== -->
   <template id="borrow_form_template" name="Form Peminjaman Laptop">
     <t t-call="website.layout">
-      <div class="container mt-5 mb-5">
+
+      <script type="text/javascript" src="/laptop_borrow/static/src/js/borrow_form.js"></script>
+
+      <div class="container mt-5 mb-5 borrow-form-card">
         <h2 class="text-center mb-4">Form Peminjaman Laptop</h2>
+
         <form id="borrow-form" action="/form/peminjaman/submit" method="post">
           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
@@ -42,13 +43,13 @@
           <!-- GURU MAPEL -->
           <div class="form-group mt-2" id="mapel_field" style="display:none;">
             <label>Guru Mata Pelajaran</label>
-            <input type="text" name="guru_mapel" class="form-control"/>
+            <input type="text" name="guru_mapel" class="form-control" required="required"/>
           </div>
 
           <!-- KETERANGAN -->
           <div class="form-group mt-2" id="keterangan_field" style="display:none;">
             <label>Keterangan</label>
-            <textarea name="keterangan" class="form-control"></textarea>
+            <textarea name="keterangan" class="form-control" required="required"></textarea>
           </div>
 
           <!-- JUMLAH -->
@@ -61,8 +62,6 @@
           <!-- PILIH SERIAL -->
           <div class="form-group mt-3">
             <label class="form-label fw-bold">Pilih Laptop (Nomor Seri)</label>
-
-            <!-- ✅ Daftar laptop dengan tinggi tetap (10 item terlihat) dan scroll untuk sisanya -->
             <div class="list-group" 
                  style="max-height: calc(2.6em * 5); overflow-y: auto; border: 1px solid #ddd; border-radius: 5px;">
               <t t-foreach="lots" t-as="lot">
@@ -71,7 +70,8 @@
                          class="form-check-input me-2 laptop-checkbox"
                          name="lot_id"
                          t-att-value="lot.id"
-                         t-att-id="'lot_' + str(lot.id)" />
+                         t-att-id="'lot_' + str(lot.id)"
+                         required="required" />
                   <t t-esc="lot.name"/>
                 </label>
               </t>
@@ -82,82 +82,9 @@
           <button type="submit" class="btn btn-primary mt-3">Kirim</button>
         </form>
       </div>
-
-      <!-- ==========================
-           SCRIPT JS
-      =========================== -->
-      <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const classSelect = document.getElementById('class_id');
-        const studentSelect = document.getElementById('borrower_id');
-        const tujuanSelect = document.getElementById('tujuan_peminjaman');
-        const mapelField = document.getElementById('mapel_field');
-        const ketField = document.getElementById('keterangan_field');
-        const jumlahInput = document.getElementById('jumlah_pinjam');
-        const checkboxes = document.querySelectorAll('.laptop-checkbox');
-
-        // 🔹 Load siswa by class (AJAX)
-        classSelect.addEventListener('change', async function() {
-          const classId = this.value;
-          studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
-          if (classId) {
-            try {
-              const response = await fetch('/get_students_by_class', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ class_id: classId })
-              });
-              const students = await response.json();
-              studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-              if (students.length > 0) {
-                students.forEach(s => {
-                  const opt = document.createElement('option');
-                  opt.value = s.id;
-                  opt.textContent = s.name;
-                  studentSelect.appendChild(opt);
-                });
-              } else {
-                studentSelect.innerHTML = '<option value="">(Tidak ada siswa)</option>';
-              }
-            } catch (err) {
-              console.error('Error:', err);
-              studentSelect.innerHTML = '<option value="">(Gagal memuat data)</option>';
-            }
-          } else {
-            studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-          }
-        });
-
-        // 🔹 Toggle field berdasarkan tujuan
-        tujuanSelect.addEventListener('change', function() {
-          mapelField.style.display = this.value === 'kbm' ? 'block' : 'none';
-          ketField.style.display = this.value === 'lainnya' ? 'block' : 'none';
-        });
-
-        // 🔹 Batasi jumlah checkbox sesuai input jumlah
-        function updateCheckboxLimit() {
-          const maxAllowed = parseInt(jumlahInput.value) || 0;
-          const checkedBoxes = document.querySelectorAll('.laptop-checkbox:checked');
-
-          if (checkedBoxes.length >= maxAllowed) {
-            checkboxes.forEach(cb => {
-              if (!cb.checked) cb.disabled = true;
-            });
-          } else {
-            checkboxes.forEach(cb => cb.disabled = false);
-          }
-        }
-
-        jumlahInput.addEventListener('input', updateCheckboxLimit);
-        checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxLimit));
-      });
-      </script>
     </t>
   </template>
 
-  <!-- ==========================
-       HALAMAN SUKSES
-  =========================== -->
   <template id="borrow_success_template" name="Borrow Success">
     <t t-call="website.layout">
       <div class="container mt-5 text-center">

@@ -1,123 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="return_form_template" name="Form Pengembalian Laptop">
-        <t t-call="website.layout">
-            <div class="container mt-5 mb-5">
-                <h2 class="text-center mb-4">Form Pengembalian Laptop</h2>
+  <template id="return_form_template" name="Form Pengembalian Laptop">
+    <t t-call="website.layout">
+    
+        <script type="text/javascript" src="/laptop_borrow/static/src/js/return_form.js"></script>
 
-                <form action="/form/pengembalian/submit" method="POST">
-                    <div class="form-group mb-3">
-                        <label for="class_id">Kelas</label>
-                        <select name="class_id" id="class_id" class="form-control" required="required">
-                            <option value="">-- Pilih Kelas --</option>
-                            <t t-foreach="classes" t-as="kelas">
-                                <option t-att-value="kelas.id"><t t-esc="kelas.name"/></option>
-                            </t>
-                        </select>
-                    </div>
+      <div class="container mt-5 mb-5 return-form-card">
+        <h2 class="text-center mb-4">Form Pengembalian Laptop</h2>
 
-                        <!-- SISWA -->
-                    <div class="form-group mt-2">
-                        <label>Nama Siswa</label>
-                        <select id="borrower_id" name="borrower_id" class="form-control" required="required">
-                        <option value="">-- Pilih Nama --</option>
-                        </select>
-                    </div>
+        <form action="/form/pengembalian/submit" method="POST">
+          <div class="form-group mb-3">
+            <label for="class_id">Kelas</label>
+            <select name="class_id" id="class_id" class="form-control" required="required">
+              <option value="">-- Pilih Kelas --</option>
+              <t t-foreach="classes" t-as="kelas">
+                <option t-att-value="kelas.id"><t t-esc="kelas.name"/></option>
+              </t>
+            </select>
+          </div>
 
-                    <div class="form-group mb-3">
-                        <label for="borrow_id">Kode Peminjaman</label>
-                        <select name="borrow_id" id="borrow_id" class="form-control" required="required">
-                            <option value="">-- Pilih Kode Peminjaman --</option>
-                            <t t-foreach="borrows" t-as="b">
-                                <option t-att-value="b.id"><t t-esc="b.name"/></option>
-                            </t>
-                        </select>
-                    </div>
+          <div class="form-group mb-3">
+            <label>Nama Siswa</label>
+            <select id="borrower_id" name="borrower_id" class="form-control" required="required">
+              <option value="">-- Pilih Nama --</option>
+            </select>
+          </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
-                </form>
-            </div>
+          <div class="form-group mb-3">
+            <label for="borrow_id">Kode Peminjaman</label>
+            <select name="borrow_id" id="borrow_id" class="form-control" required="required">
+              <option value="">-- Pilih Kode Peminjaman --</option>
+              <t t-foreach="borrows" t-as="b">
+                <option t-att-value="b.id"><t t-esc="b.name"/></option>
+              </t>
+            </select>
+          </div>
 
-            
-            <!-- ==========================
-                SCRIPT JS
-            =========================== -->
-            <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const classSelect = document.getElementById('class_id');
-                const studentSelect = document.getElementById('borrower_id');
-                const tujuanSelect = document.getElementById('tujuan_peminjaman');
-                const mapelField = document.getElementById('mapel_field');
-                const ketField = document.getElementById('keterangan_field');
-                const jumlahInput = document.getElementById('jumlah_pinjam');
-                const checkboxes = document.querySelectorAll('.laptop-checkbox');
+          <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
+        </form>
+      </div>
+    </t>
+  </template>
 
-                // 🔹 Load siswa by class (AJAX)
-                classSelect.addEventListener('change', async function() {
-                const classId = this.value;
-                studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
-                if (classId) {
-                    try {
-                    const response = await fetch('/get_students_by_class', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ class_id: classId })
-                    });
-                    const students = await response.json();
-                    studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-                    if (students.length > 0) {
-                        students.forEach(s => {
-                        const opt = document.createElement('option');
-                        opt.value = s.id;
-                        opt.textContent = s.name;
-                        studentSelect.appendChild(opt);
-                        });
-                    } else {
-                        studentSelect.innerHTML = '<option value="">(Tidak ada siswa)</option>';
-                    }
-                    } catch (err) {
-                    console.error('Error:', err);
-                    studentSelect.innerHTML = '<option value="">(Gagal memuat data)</option>';
-                    }
-                } else {
-                    studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-                }
-                });
-
-                // 🔹 Toggle field berdasarkan tujuan
-                tujuanSelect.addEventListener('change', function() {
-                mapelField.style.display = this.value === 'kbm' ? 'block' : 'none';
-                ketField.style.display = this.value === 'lainnya' ? 'block' : 'none';
-                });
-
-                // 🔹 Batasi jumlah checkbox sesuai input jumlah
-                function updateCheckboxLimit() {
-                const maxAllowed = parseInt(jumlahInput.value) || 0;
-                const checkedBoxes = document.querySelectorAll('.laptop-checkbox:checked');
-
-                if (checkedBoxes.length >= maxAllowed) {
-                    checkboxes.forEach(cb => {
-                    if (!cb.checked) cb.disabled = true;
-                    });
-                } else {
-                    checkboxes.forEach(cb => cb.disabled = false);
-                }
-                }
-
-                jumlahInput.addEventListener('input', updateCheckboxLimit);
-                checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxLimit));
-            });
-            </script>
-        </t>
-    </template>
-
-    <template id="return_form_success" name="Pengembalian Berhasil">
-        <t t-call="website.layout">
-            <div class="container text-center mt-5 mb-5">
-                <h3>✅ Pengembalian Laptop Berhasil!</h3>
-                <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
-                <a href="/form/pengembalian" class="btn btn-secondary mt-3">Kembali ke Form</a>
-            </div>
-        </t>
-    </template>
+  <template id="return_form_success" name="Pengembalian Berhasil">
+    <t t-call="website.layout">
+      <div class="container text-center mt-5 mb-5">
+        <h3>✅ Pengembalian Laptop Berhasil!</h3>
+        <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
+        <a href="/form/pengembalian" class="btn btn-secondary mt-3">Kembali ke Form</a>
+      </div>
+    </t>
+  </template>
 </odoo>

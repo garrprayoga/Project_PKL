@@ -1,0 +1,71 @@
+body {
+  background-color: #f5f9f6;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Judul form */
+.borrow-form-card h2 {
+  color: #1b5e20;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Label field */
+.borrow-form-card label {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Tombol submit */
+.borrow-form-card .btn-primary {
+  background-color: #2e7d32;
+  border: none;
+  font-weight: bold;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.borrow-form-card .btn-primary:hover {
+  background-color: #1b5e20;
+  transition: 0.3s;
+}
+
+/* Efek fokus input */
+.borrow-form-card select:focus,
+.borrow-form-card input:focus,
+.borrow-form-card textarea:focus {
+  border-color: #2e7d32 !important;
+  box-shadow: 0 0 5px rgba(46, 125, 50, 0.4);
+}
+
+/* Hilangkan tampilan kotak/card */
+.borrow-form-card {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 2rem 0;
+}
+
+/* Style untuk list laptop (scroll area) */
+.borrow-form-card .list-group {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: calc(2.6em * 5);
+  overflow-y: auto;
+}
+
+/* Checkbox item */
+.borrow-form-card .list-group-item {
+  border: none;
+  border-bottom: 1px solid #eee;
+}
+.borrow-form-card .list-group-item:last-child {
+  border-bottom: none;
+}
+
+/* Hilangkan footer bawaan website Odoo */
+footer,
+.oe_structure.oe_structure_footer {
+  display: none !important;
+}
