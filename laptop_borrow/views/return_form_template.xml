@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="return_form_template" name="Form Pengembalian Laptop">
+        <t t-call="website.layout">
+            <div class="container mt-5 mb-5">
+                <h2 class="text-center mb-4">Form Pengembalian Laptop</h2>
+
+                <form action="/form/pengembalian/submit" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="class_id">Kelas</label>
+                        <select name="class_id" id="class_id" class="form-control" required="required">
+                            <option value="">-- Pilih Kelas --</option>
+                            <t t-foreach="classes" t-as="kelas">
+                                <option t-att-value="kelas.id"><t t-esc="kelas.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="borrower_id">Nama Peminjam</label>
+                        <select name="borrower_id" id="borrower_id" class="form-control" required="required">
+                            <option value="">-- Pilih Peminjam --</option>
+                            <t t-foreach="borrowers" t-as="brw">
+                                <option t-att-value="brw.id"><t t-esc="brw.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="borrow_id">Kode Peminjaman</label>
+                        <select name="borrow_id" id="borrow_id" class="form-control" required="required">
+                            <option value="">-- Pilih Kode Peminjaman --</option>
+                            <t t-foreach="borrows" t-as="b">
+                                <option t-att-value="b.id"><t t-esc="b.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+    <template id="return_form_success" name="Pengembalian Berhasil">
+        <t t-call="website.layout">
+            <div class="container text-center mt-5 mb-5">
+                <h3>✅ Pengembalian Laptop Berhasil!</h3>
+                <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
+                <a href="/form/pengembalian" class="btn btn-secondary mt-3">Kembali ke Form</a>
+            </div>
+        </t>
+    </template>
+</odoo>

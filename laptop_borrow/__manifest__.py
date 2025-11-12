@@ -20,6 +20,7 @@
         'views/product_view.xml',
         'views/menuitems.xml',
         'views/borrow_form_template.xml',
+        'views/return_form_template.xml',
         'views/res_partner_view.xml',
     ],
     'assets': {
