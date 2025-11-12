@@ -61,9 +61,12 @@
           <!-- PILIH SERIAL -->
           <div class="form-group mt-3">
             <label class="form-label fw-bold">Pilih Laptop (Nomor Seri)</label>
-            <div class="list-group">
+
+            <!-- ✅ Daftar laptop dengan tinggi tetap (10 item terlihat) dan scroll untuk sisanya -->
+            <div class="list-group" 
+                 style="max-height: calc(2.6em * 5); overflow-y: auto; border: 1px solid #ddd; border-radius: 5px;">
               <t t-foreach="lots" t-as="lot">
-                <label class="list-group-item d-flex align-items-center">
+                <label class="list-group-item d-flex align-items-center" style="height: 2.6em;">
                   <input type="checkbox"
                          class="form-check-input me-2 laptop-checkbox"
                          name="lot_id"
@@ -73,6 +76,7 @@
                 </label>
               </t>
             </div>
+            <small class="text-muted">Scroll ke bawah untuk melihat laptop lainnya</small>
           </div>
 
           <button type="submit" class="btn btn-primary mt-3">Kirim</button>
