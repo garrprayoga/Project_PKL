@@ -8,20 +8,16 @@ class BorrowLaptopController(http.Controller):
     def borrow_form(self, **kwargs):
         kelas = request.env['kelas'].sudo().search([])
 
-        # Cari produk template bernama "Laptop"
         laptop_product = request.env['product.template'].sudo().search([('name', '=', 'Laptop')], limit=1)
 
-        # Ambil semua serial number (lot) dari produk tersebut
         all_serials = request.env['stock.lot'].sudo().search([
             ('product_id.product_tmpl_id', '=', laptop_product.id)
         ])
 
-        # Ambil serial yang sedang dipinjam
         borrowed_lot_ids = request.env['borrow.laptop.line'].sudo().search([
             ('borrow_id.status', '=', 'dipinjam')
         ]).mapped('laptop_serial_id.id')
 
-        # Filter hanya serial yang belum dipinjam
         available_serials = all_serials.filtered(lambda l: l.id not in borrowed_lot_ids)
 
         return request.render('laptop_borrow.borrow_form_template', {
@@ -52,12 +48,25 @@ class BorrowLaptopController(http.Controller):
     def borrow_form_submit(self, **post):
         borrower_id = post.get('borrower_id')
         class_id = post.get('class_id')
-        tujuan_peminjaman = post.get('tujuan_peminjaman')
-        guru_mapel = post.get('guru_mapel')
-        keterangan = post.get('keterangan')
+        tujuan = post.get('tujuan_peminjaman')
+        guru_mapel = post.get('guru_mapel') or False
+        keterangan = post.get('keterangan') or False
         jumlah_pinjam = post.get('jumlah_pinjam')
 
         lot_ids = request.httprequest.form.getlist('lot_id')
+
+        # =======================================================
+        # VALIDASI SERVER-SIDE (ANTI-BYPASS)
+        # =======================================================
+        if tujuan == 'kbm' and not guru_mapel:
+            return request.render('laptop_borrow.borrow_form_template', {
+                'error': "Guru Mapel wajib diisi untuk KBM.",
+            })
+
+        if tujuan == 'lainnya' and not keterangan:
+            return request.render('laptop_borrow.borrow_form_template', {
+                'error': "Keterangan wajib diisi untuk tujuan lainnya.",
+            })
 
         borrow_date = fields.Datetime.now()
 
@@ -74,7 +83,7 @@ class BorrowLaptopController(http.Controller):
             'borrower_id': borrower.id,
             'class_id': class_id,
             'borrow_date': borrow_date,
-            'tujuan_peminjaman': tujuan_peminjaman,
+            'tujuan_peminjaman': tujuan,
             'guru_mapel': guru_mapel,
             'keterangan': keterangan,
             'jumlah_pinjam': jumlah_pinjam,

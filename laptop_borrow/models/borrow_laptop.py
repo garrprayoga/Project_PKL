@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from datetime import date
 
 class BorrowLaptop(models.Model):
@@ -67,6 +67,20 @@ class BorrowLaptop(models.Model):
         string="Daftar Laptop Dipinjam"
     )
 
+    # ============================================================
+    # VALIDASI WAJIB DIISI (ANTI-BYPASS)
+    # ============================================================
+    @api.constrains('tujuan_peminjaman', 'guru_mapel', 'keterangan')
+    def _check_required_fields(self):
+        for rec in self:
+            if rec.tujuan_peminjaman == 'kbm' and not rec.guru_mapel:
+                raise ValidationError("Guru Mapel wajib diisi jika tujuan adalah KBM.")
+            if rec.tujuan_peminjaman == 'lainnya' and not rec.keterangan:
+                raise ValidationError("Keterangan wajib diisi jika tujuan adalah Lainnya.")
+
+    # ============================================================
+    # GENERATE CODE
+    # ============================================================
     @api.model
     def create(self, vals):
         if vals.get('name', "New") == "New":
@@ -78,9 +92,8 @@ class BorrowLaptop(models.Model):
             ], order='name desc', limit=1)
 
             if last_record:
-                last_number_str = last_record.name.split('-')[-1]
                 try:
-                    last_number = int(last_number_str)
+                    last_number = int(last_record.name.split('-')[-1])
                 except ValueError:
                     last_number = 0
                 new_number = f"{last_number + 1:02d}"
@@ -91,19 +104,38 @@ class BorrowLaptop(models.Model):
 
         return super(BorrowLaptop, self).create(vals)
 
+    # ============================================================
+    # STATUS PINJAM/KEMBALIKAN
+    # ============================================================
     def action_dynamic_borrow_return(self):
         for rec in self:
+
             if rec.status in ['draft', 'dikembalikan']:
+
+                kelas_borrowing = self.env['borrow.laptop'].search([
+                    ('class_id', '=', rec.class_id.id),
+                    ('status', '=', 'dipinjam'),
+                    ('id', '!=', rec.id)
+                ], limit=1)
+
+                if kelas_borrowing:
+                    raise UserError(
+                        f"Kelas {rec.class_id.name} masih memiliki siswa yang meminjam laptop."
+                    )
+
                 existing_borrower = self.env['borrow.laptop'].search([
                     ('borrower_id', '=', rec.borrower_id.id),
                     ('status', '=', 'dipinjam'),
                     ('id', '!=', rec.id)
-                ])
+                ], limit=1)
+
                 if existing_borrower:
                     raise UserError(
-                        f"⚠ {rec.borrower_id.name} masih memiliki pinjaman aktif dan tidak dapat meminjam lagi."
+                        f"{rec.borrower_id.name} masih memiliki pinjaman aktif."
                     )
+
                 rec.status = 'dipinjam'
+
             elif rec.status == 'dipinjam':
                 rec.status = 'dikembalikan'
 
