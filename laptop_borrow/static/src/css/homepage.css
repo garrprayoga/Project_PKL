@@ -1,0 +1,41 @@
+.card {
+  border-radius: 14px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Peminjaman */
+.card-peminjaman {
+  background: linear-gradient(135deg, #4f8df7, #6fa8ff);
+  color: #fff;
+}
+
+/* Pengembalian */
+.card-pengembalian {
+  background: linear-gradient(135deg, #2ecc71, #58d68d);
+  color: #fff;
+}
+
+/* Hover */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Icon */
+.icon-card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .icon-card {
+  transform: scale(1.15);
+}
+
+.icon-img {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+}

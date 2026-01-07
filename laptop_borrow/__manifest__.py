@@ -21,12 +21,14 @@
         'views/menuitems.xml',
         'views/borrow_form_template.xml',
         'views/return_form_template.xml',
+        'views/homepage_template.xml',
         'views/res_partner_view.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             '/laptop_borrow/static/src/css/borrow_form.css',
             '/laptop_borrow/static/src/css/return_form.css',
+            '/laptop_borrow/static/src/css/homepage.css',
             '/laptop_borrow/static/src/js/borrow_form.js',
             '/laptop_borrow/static/src/js/return_form.js',
         ],
