@@ -4,7 +4,7 @@
     <t t-call="website.layout">
 
       <div class="container mt-5">
-        <h2 class="text-center mb-4">Sistem Peminjaman Barang</h2>
+        <h2 class="text-center mb-4">Sistem Peminjaman Laptop</h2>
 
         <div class="row justify-content-center gap-4">
 
@@ -13,8 +13,8 @@
         <a href="/form/peminjaman" class="text-decoration-none">
             <div class="card card-peminjaman text-center p-4">
             <img src="/laptop_borrow/static/src/img/borrow.png" class="icon-img mb-3"/>
-            <h4>Peminjaman Barang</h4>
-            <p>Ajukan peminjaman barang</p>
+            <h4>Peminjaman Laptop</h4>
+            <p>Ajukan peminjaman Laptop</p>
             </div>
         </a>
         </div>
@@ -24,8 +24,8 @@
         <a href="/form/pengembalian" class="text-decoration-none">
             <div class="card card-pengembalian text-center p-4">
             <img src="/laptop_borrow/static/src/img/return.png" class="icon-img mb-3"/>
-            <h4>Pengembalian Barang</h4>
-            <p>Kembalikan barang yang dipinjam</p>
+            <h4>Pengembalian Laptop</h4>
+            <p>Kembalikan Laptop yang dipinjam</p>
             </div>
         </a>
         </div>

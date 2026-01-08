@@ -6,10 +6,18 @@ import json
 class BorrowLaptopController(http.Controller):
 
     # =====================================================
-    # HELPER: RENDER FORM + ERROR (AGAR DATA TETAP UTUH)
+    # HELPER: RENDER FORM + ERROR
     # =====================================================
     def _render_form_with_error(self, error_message):
-        kelas = request.env['kelas'].sudo().search([])
+
+        # KELAS YANG TIDAK SEDANG MEMINJAM
+        borrowed_class_ids = request.env['borrow.laptop'].sudo().search([
+            ('status', '=', 'dipinjam')
+        ]).mapped('class_id.id')
+
+        kelas = request.env['kelas'].sudo().search([
+            ('id', 'not in', borrowed_class_ids)
+        ])
 
         laptop_product = request.env['product.template'].sudo().search([
             ('name', '=', 'Laptop')
@@ -38,7 +46,14 @@ class BorrowLaptopController(http.Controller):
     # =====================================================
     @http.route('/form/peminjaman', type='http', auth='public', website=True)
     def borrow_form(self, **kwargs):
-        kelas = request.env['kelas'].sudo().search([])
+
+        borrowed_class_ids = request.env['borrow.laptop'].sudo().search([
+            ('status', '=', 'dipinjam')
+        ]).mapped('class_id.id')
+
+        kelas = request.env['kelas'].sudo().search([
+            ('id', 'not in', borrowed_class_ids)
+        ])
 
         laptop_product = request.env['product.template'].sudo().search([
             ('name', '=', 'Laptop')
@@ -62,31 +77,11 @@ class BorrowLaptopController(http.Controller):
         })
 
     # =====================================================
-    # CEK STATUS KELAS (AJAX)
-    # =====================================================
-    @http.route('/check_class_borrow_status', type='json', auth='public')
-    def check_class_borrow_status(self, class_id):
-        if not class_id:
-            return {'blocked': False}
-
-        active_borrow = request.env['borrow.laptop'].sudo().search([
-            ('class_id', '=', int(class_id)),
-            ('status', '=', 'dipinjam')
-        ], limit=1)
-
-        if active_borrow:
-            return {
-                'blocked': True,
-                'message': f"Kelas {active_borrow.class_id.name} masih memiliki peminjaman aktif."
-            }
-
-        return {'blocked': False}
-
-    # =====================================================
     # AMBIL SISWA PER KELAS (AJAX)
     # =====================================================
     @http.route('/get_students_by_class', type='http', auth='public', csrf=False)
     def get_students_by_class(self, **kw):
+
         data = request.httprequest.get_data(as_text=True)
         try:
             json_data = json.loads(data) if data else {}
@@ -113,7 +108,7 @@ class BorrowLaptopController(http.Controller):
         )
 
     # =====================================================
-    # SUBMIT PEMINJAMAN (FINAL SECURITY)
+    # SUBMIT PEMINJAMAN
     # =====================================================
     @http.route('/form/peminjaman/submit', type='http', auth='public',
                 website=True, methods=['POST'])
@@ -127,9 +122,7 @@ class BorrowLaptopController(http.Controller):
         jumlah_pinjam = post.get('jumlah_pinjam')
         lot_ids = request.httprequest.form.getlist('lot_id')
 
-        # ===================================================
-        # 🔒 FINAL VALIDASI: 1 KELAS = 1 PINJAMAN AKTIF
-        # ===================================================
+        # 🔒 VALIDASI FINAL (BACKEND)
         existing_borrow = request.env['borrow.laptop'].sudo().search([
             ('class_id', '=', int(class_id)),
             ('status', '=', 'dipinjam')
@@ -140,24 +133,14 @@ class BorrowLaptopController(http.Controller):
                 f"Kelas {existing_borrow.class_id.name} masih memiliki peminjaman aktif."
             )
 
-        # ===================================================
-        # VALIDASI TUJUAN
-        # ===================================================
         if tujuan == 'kbm' and not guru_mapel:
-            return self._render_form_with_error(
-                "Guru Mapel wajib diisi untuk KBM."
-            )
+            return self._render_form_with_error("Guru Mapel wajib diisi.")
 
         if tujuan == 'lainnya' and not keterangan:
-            return self._render_form_with_error(
-                "Keterangan wajib diisi untuk tujuan lainnya."
-            )
+            return self._render_form_with_error("Keterangan wajib diisi.")
 
         borrow_date = fields.Datetime.now()
 
-        # ===================================================
-        # AMBIL / BUAT SISWA
-        # ===================================================
         if borrower_id and borrower_id.isdigit():
             borrower = request.env['res.partner'].sudo().browse(int(borrower_id))
         else:
@@ -167,9 +150,6 @@ class BorrowLaptopController(http.Controller):
                 'class_id': int(class_id)
             })
 
-        # ===================================================
-        # CREATE PEMINJAMAN
-        # ===================================================
         borrow_record = request.env['borrow.laptop'].sudo().create({
             'borrower_id': borrower.id,
             'class_id': int(class_id),

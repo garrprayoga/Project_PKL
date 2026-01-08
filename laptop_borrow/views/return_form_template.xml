@@ -48,7 +48,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
-          
+
           <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
         </form>
       </div>
@@ -60,7 +60,7 @@
       <div class="container text-center mt-5 mb-5">
         <h3>✅ Pengembalian Laptop Berhasil!</h3>
         <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
-        <a href="/form/pengembalian" class="btn btn-secondary mt-3">Kembali ke Form</a>
+        <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
       </div>
     </t>
   </template>
