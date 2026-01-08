@@ -79,7 +79,7 @@
             <small class="text-muted">Scroll ke bawah untuk melihat laptop lainnya</small>
           </div>
 
-          <button type="submit" class="btn btn-primary mt-3">Kirim</button>
+          <button type="submit" id= "submit-btn" class="btn btn-primary mt-3">Kirim</button>
 
           <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
         </form>
