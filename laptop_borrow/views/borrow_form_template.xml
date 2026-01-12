@@ -87,13 +87,20 @@
     </t>
   </template>
 
-  <template id="borrow_success_template" name="Borrow Success">
-    <t t-call="website.layout">
-      <div class="container mt-5 text-center">
-        <h2>✅ Peminjaman berhasil dikirim!</h2>
-        <p>Terima kasih telah mengisi form peminjaman.</p>
-        <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
-      </div>
-    </t>
-  </template>
+    <template id="borrow_success_template" name="Borrow Success">
+      <t t-call="website.layout">
+        <div class="container mt-5 text-center">
+
+          <!-- GAMBAR SUCCESS -->
+          <img src="/laptop_borrow/static/src/img/success.png"
+              alt="Peminjaman Berhasil"
+              class="success-img mb-3"/>
+
+          <h3>Peminjaman berhasil dikirim!</h3>
+          <p>Terima kasih telah mengisi form peminjaman.</p>
+
+          <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
+        </div>
+      </t>
+    </template>
 </odoo>

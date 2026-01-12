@@ -5,9 +5,7 @@ import json
 
 class ReturnLaptopController(http.Controller):
 
-    # ================================
-    # FORM PAGE
-    # ================================
+    # form
     @http.route('/form/pengembalian', auth='public', website=True)
     def return_form(self, **kwargs):
         classes = request.env['kelas'].sudo().search([])
@@ -15,9 +13,7 @@ class ReturnLaptopController(http.Controller):
             'classes': classes,
         })
 
-    # ================================
-    # AJAX: Ambil siswa berdasarkan kelas
-    # ================================
+    # siswa per kelas
     @http.route('/get_students_by_class_return', type='http', auth='public', csrf=False)
     def get_students_by_class_return(self, **kwargs):
 
@@ -43,9 +39,7 @@ class ReturnLaptopController(http.Controller):
             headers=[('Content-Type', 'application/json')]
         )
 
-    # ================================
-    # AJAX: Ambil kode peminjaman berdasarkan siswa
-    # ================================
+    # kode peminjaman per siswa
     @http.route('/get_borrows_by_student', type='http', auth='public', csrf=False)
     def get_borrows_by_student(self, **kwargs):
 
@@ -71,9 +65,7 @@ class ReturnLaptopController(http.Controller):
             headers=[('Content-Type', 'application/json')]
         )
 
-    # ================================
-    # SUBMIT FORM
-    # ================================
+    # submit
     @http.route(
         '/form/pengembalian/submit',
         type='http',
@@ -98,9 +90,7 @@ class ReturnLaptopController(http.Controller):
 
         return request.redirect('/form/pengembalian/success')
 
-    # ================================
-    # SUCCESS PAGE
-    # ================================
+    # success
     @http.route('/form/pengembalian/success', auth='public', website=True)
     def return_success(self, **kwargs):
         return request.render('laptop_borrow.return_form_success', {})

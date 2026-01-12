@@ -3,32 +3,30 @@
   <template id="homepage_template" name="Homepage Laptop Borrow">
     <t t-call="website.layout">
 
+      
+      <!-- MAIN CONTENT -->
       <div class="container mt-5">
         <h2 class="text-center mb-4">Sistem Peminjaman Laptop</h2>
 
-        <div class="row justify-content-center gap-4">
+        <div class="dashboard-wrapper">
 
-        <!-- CARD PEMINJAMAN -->
-        <div class="col-md-4">
-        <a href="/form/peminjaman" class="text-decoration-none">
+          <!-- CARD PEMINJAMAN -->
+          <a href="/form/peminjaman" class="text-decoration-none">
             <div class="card card-peminjaman text-center p-4">
-            <img src="/laptop_borrow/static/src/img/borrow.png" class="icon-img mb-3"/>
-            <h4>Peminjaman Laptop</h4>
-            <p>Ajukan peminjaman Laptop</p>
+              <img src="/laptop_borrow/static/src/img/borrow2.png" class="icon-img mb-3"/>
+              <h4>Peminjaman Laptop</h4>
+              <p>Ajukan peminjaman Laptop</p>
             </div>
-        </a>
-        </div>
+          </a>
 
-        <!-- CARD PENGEMBALIAN -->
-        <div class="col-md-4">
-        <a href="/form/pengembalian" class="text-decoration-none">
+          <!-- CARD PENGEMBALIAN -->
+          <a href="/form/pengembalian" class="text-decoration-none">
             <div class="card card-pengembalian text-center p-4">
-            <img src="/laptop_borrow/static/src/img/return.png" class="icon-img mb-3"/>
-            <h4>Pengembalian Laptop</h4>
-            <p>Kembalikan Laptop yang dipinjam</p>
+              <img src="/laptop_borrow/static/src/img/return2.png" class="icon-img mb-3"/>
+              <h4>Pengembalian Laptop</h4>
+              <p>Kembalikan Laptop yang dipinjam</p>
             </div>
-        </a>
-        </div>
+          </a>
 
         </div>
       </div>

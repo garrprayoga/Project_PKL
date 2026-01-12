@@ -4,13 +4,8 @@ import json
 
 
 class BorrowLaptopController(http.Controller):
-
-    # =====================================================
-    # HELPER: RENDER FORM + ERROR
-    # =====================================================
     def _render_form_with_error(self, error_message):
 
-        # KELAS YANG TIDAK SEDANG MEMINJAM
         borrowed_class_ids = request.env['borrow.laptop'].sudo().search([
             ('status', '=', 'dipinjam')
         ]).mapped('class_id.id')
@@ -41,9 +36,7 @@ class BorrowLaptopController(http.Controller):
             'lots': available_serials,
         })
 
-    # =====================================================
-    # FORM PEMINJAMAN
-    # =====================================================
+    # form peminjaman
     @http.route('/form/peminjaman', type='http', auth='public', website=True)
     def borrow_form(self, **kwargs):
 
@@ -76,19 +69,53 @@ class BorrowLaptopController(http.Controller):
             'lots': available_serials,
         })
 
-    # =====================================================
-    # AMBIL SISWA PER KELAS (AJAX)
-    # =====================================================
+    # cek kelas
+    @http.route('/check_class_borrow_status', type='http', auth='public', csrf=False)
+    def check_class_borrow_status(self, **kwargs):
+
+        body = request.httprequest.get_data(as_text=True)
+        try:
+            data = json.loads(body) if body else {}
+        except json.JSONDecodeError:
+            data = {}
+
+        class_id = data.get('class_id')
+        if not class_id:
+            return request.make_response(
+                json.dumps({'blocked': False}),
+                headers=[('Content-Type', 'application/json')]
+            )
+
+        existing = request.env['borrow.laptop'].sudo().search([
+            ('class_id', '=', int(class_id)),
+            ('status', '=', 'dipinjam')
+        ], limit=1)
+
+        if existing:
+            return request.make_response(
+                json.dumps({
+                    'blocked': True,
+                    'message': f"Kelas {existing.class_id.name} masih memiliki peminjaman aktif."
+                }),
+                headers=[('Content-Type', 'application/json')]
+            )
+
+        return request.make_response(
+            json.dumps({'blocked': False}),
+            headers=[('Content-Type', 'application/json')]
+        )
+
+    # siswa ambil dri kelas
     @http.route('/get_students_by_class', type='http', auth='public', csrf=False)
     def get_students_by_class(self, **kw):
 
-        data = request.httprequest.get_data(as_text=True)
+        body = request.httprequest.get_data(as_text=True)
         try:
-            json_data = json.loads(data) if data else {}
+            data = json.loads(body) if body else {}
         except json.JSONDecodeError:
-            json_data = {}
+            data = {}
 
-        class_id = json_data.get('class_id')
+        class_id = data.get('class_id')
         if not class_id:
             return request.make_response(
                 json.dumps([]),
@@ -107,11 +134,14 @@ class BorrowLaptopController(http.Controller):
             headers=[('Content-Type', 'application/json')]
         )
 
-    # =====================================================
-    # SUBMIT PEMINJAMAN
-    # =====================================================
-    @http.route('/form/peminjaman/submit', type='http', auth='public',
-                website=True, methods=['POST'])
+    # submit
+    @http.route(
+        '/form/peminjaman/submit',
+        type='http',
+        auth='public',
+        website=True,
+        methods=['POST']
+    )
     def borrow_form_submit(self, **post):
 
         borrower_id = post.get('borrower_id')
@@ -122,7 +152,6 @@ class BorrowLaptopController(http.Controller):
         jumlah_pinjam = post.get('jumlah_pinjam')
         lot_ids = request.httprequest.form.getlist('lot_id')
 
-        # 🔒 VALIDASI FINAL (BACKEND)
         existing_borrow = request.env['borrow.laptop'].sudo().search([
             ('class_id', '=', int(class_id)),
             ('status', '=', 'dipinjam')

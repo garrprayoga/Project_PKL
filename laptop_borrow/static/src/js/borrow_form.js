@@ -11,33 +11,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let classBlocked = false;
 
-  // =========================================
-  // CEK STATUS KELAS (ALERT ONLY)
-  // =========================================
+   // ===============================
+  // CEK STATUS KELAS
+  // ===============================
   classSelect.addEventListener('change', async function () {
     const classId = this.value;
     classBlocked = false;
 
     studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-    studentSelect.disabled = false;
 
     if (!classId) return;
 
     try {
-      const res = await fetch('/check_class_borrow_status', {
+      const response = await fetch('/check_class_borrow_status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ class_id: classId })
       });
 
-      const result = await res.json();
+      const result = await response.json();
 
       if (result.blocked) {
         classBlocked = true;
         alert('⚠ ' + result.message);
       }
 
-      // Tetap load siswa (biar UI tidak rusak)
       const studentsRes = await fetch('/get_students_by_class', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

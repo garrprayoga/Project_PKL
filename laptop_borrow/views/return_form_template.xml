@@ -56,12 +56,19 @@
   </template>
 
   <template id="return_form_success" name="Pengembalian Berhasil">
-    <t t-call="website.layout">
-      <div class="container text-center mt-5 mb-5">
-        <h3>✅ Pengembalian Laptop Berhasil!</h3>
-        <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
-        <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
-      </div>
-    </t>
-  </template>
+  <t t-call="website.layout">
+    <div class="container text-center mt-5 mb-5">
+
+      <!-- GAMBAR SUCCESS -->
+      <img src="/laptop_borrow/static/src/img/success.png"
+           alt="Pengembalian Berhasil"
+           class="success-img mb-3"/>
+
+      <h3>Pengembalian Laptop Berhasil!</h3>
+      <p>Terima kasih telah mengembalikan laptop tepat waktu.</p>
+
+      <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
+    </div>
+  </t>
+</template>
 </odoo>
