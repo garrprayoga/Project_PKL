@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const studentSelect = document.getElementById('borrower_id');
     const borrowSelect = document.getElementById('borrow_id');
 
-    // =============================
+   
     // 1. LOAD STUDENT BY CLASS
-    // =============================
+   
     classSelect?.addEventListener('change', async function () {
         const classId = this.value;
 
@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // =============================
+    
     // 2. LOAD BORROW CODE BY STUDENT
-    // =============================
+
     studentSelect?.addEventListener('change', async function () {
         const borrowerId = this.value;
 

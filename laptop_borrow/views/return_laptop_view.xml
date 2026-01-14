@@ -20,6 +20,7 @@
                         <field name="borrower_id"/>
                         <field name="borrow_id"/>
                         <field name="return_date"/>
+                        <field name="note"/>
                     </group>
                 </sheet>
             </form>
@@ -33,7 +34,7 @@
             <tree string="Daftar Pengembalian">
                 <field name="class_id"/>
                 <field name="borrower_id"/>
-                <field name="borrow_id"/>
+                <field name="borrow_id"/>   
                 <field name="return_date"/>
                 <field name="state"/>
             </tree>

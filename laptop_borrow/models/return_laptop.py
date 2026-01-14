@@ -35,6 +35,10 @@ class ReturnLaptop(models.Model):
         ('done', 'Selesai'),
     ], string="Status", default='draft', tracking=True)
 
+    note = fields.Text(string='Catatan Pengembalian')
+
+    
+
     def action_confirm_return(self):
         """Ubah status peminjaman jadi dikembalikan"""
         for rec in self:

@@ -39,7 +39,7 @@ class BorrowLaptop(models.Model):
     )
 
     keterangan = fields.Text(
-        string="Keterangan",
+        string="Keterangan ",
         help="Tambahkan catatan jika tujuan bukan KBM."
     )
 
@@ -67,9 +67,7 @@ class BorrowLaptop(models.Model):
         string="Daftar Laptop Dipinjam"
     )
 
-    # ============================================================
-    # VALIDASI WAJIB DIISI (ANTI-BYPASS)
-    # ============================================================
+    # VALIDASI WAJIB DIISI
     @api.constrains('tujuan_peminjaman', 'guru_mapel', 'keterangan')
     def _check_required_fields(self):
         for rec in self:
@@ -78,9 +76,8 @@ class BorrowLaptop(models.Model):
             if rec.tujuan_peminjaman == 'lainnya' and not rec.keterangan:
                 raise ValidationError("Keterangan wajib diisi jika tujuan adalah Lainnya.")
 
-    # ============================================================
+
     # GENERATE CODE
-    # ============================================================
     @api.model
     def create(self, vals):
         if vals.get('name', "New") == "New":
@@ -104,9 +101,8 @@ class BorrowLaptop(models.Model):
 
         return super(BorrowLaptop, self).create(vals)
 
-    # ============================================================
+
     # STATUS PINJAM/KEMBALIKAN
-    # ============================================================
     def action_dynamic_borrow_return(self):
         for rec in self:
 

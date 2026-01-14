@@ -20,9 +20,8 @@ class BorrowLaptopLine(models.Model):
         domain="[('product_id.product_tmpl_id.is_laptop','=',True)]"
     )
 
-    # =====================================================
-    # 🔒 VALIDASI SERVER (ANTI DOUBLE PINJAM)
-    # =====================================================
+  
+    # VALIDASI
     @api.constrains('laptop_serial_id')
     def _check_laptop_not_double(self):
         for line in self:

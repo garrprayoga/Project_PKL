@@ -20,4 +20,11 @@
               parent="menu_laptop_root"
               action="action_return_laptop"
               sequence="20"/>
+
+    <menuitem id="menu_laptop_available"
+              name="Laptop Tersedia"
+              action="action_available_laptop_serials"
+            groups="stock.group_stock_user"/>
+
+
 </odoo>

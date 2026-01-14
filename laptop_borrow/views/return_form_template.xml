@@ -8,7 +8,7 @@
       <div class="container mt-5 mb-5 return-form-card">
         <h2 class="text-center mb-4">Form Pengembalian Laptop</h2>
 
-        <!-- ✅ TAMBAHKAN ERROR DISPLAY -->
+        <!-- TAMBAHKAN ERROR DISPLAY -->
         <t t-if="error">
           <div class="alert alert-danger">
             <strong>⚠ Kesalahan:</strong> <span t-esc="error"/>
@@ -16,7 +16,7 @@
         </t>
 
         <form action="/form/pengembalian/submit" method="POST">
-          <!-- ✅ TAMBAHKAN CSRF TOKEN -->
+          <!-- TAMBAHKAN CSRF TOKEN -->
           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
           <!-- KELAS -->
@@ -46,6 +46,13 @@
             </select>
             <small class="text-muted">Hanya menampilkan peminjaman aktif milik siswa terpilih</small>
           </div>
+          
+          <!-- CATATAN -->
+          <div class="form-group mt-2 ">
+            <label>Catatan Pengembalian</label>
+            <textarea name="note" class="form-control" ></textarea>
+          </div>
+
 
           <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
 

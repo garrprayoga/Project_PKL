@@ -79,11 +79,13 @@ class ReturnLaptopController(http.Controller):
         class_id = int(post.get('class_id'))
         borrower_id = int(post.get('borrower_id'))
         borrow_id = int(post.get('borrow_id'))
+        note = post.get('note')
 
         return_laptop = request.env['return.laptop'].sudo().create({
             'class_id': class_id,
             'borrower_id': borrower_id,
             'borrow_id': borrow_id,
+            'note': note
         })
 
         return_laptop.action_confirm_return()

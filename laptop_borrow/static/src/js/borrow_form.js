@@ -11,9 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let classBlocked = false;
 
-   // ===============================
+   
   // CEK STATUS KELAS
-  // ===============================
   classSelect.addEventListener('change', async function () {
     const classId = this.value;
     classBlocked = false;
@@ -56,9 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // =========================================
+ 
   // TOGGLE TUJUAN
-  // =========================================
   tujuanSelect.addEventListener('change', function () {
     const guruInput = mapelField.querySelector('input');
     const ketInput = ketField.querySelector('textarea');
@@ -77,9 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // =========================================
+
   // BATASI JUMLAH CHECKBOX
-  // =========================================
   function updateCheckboxLimit() {
     const max = parseInt(jumlahInput.value) || 0;
     const checked = document.querySelectorAll('.laptop-checkbox:checked');
@@ -92,9 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
   jumlahInput.addEventListener('input', updateCheckboxLimit);
   checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxLimit));
 
-  // =========================================
+ 
   // FINAL VALIDASI (ALERT SAJA)
-  // =========================================
   form.addEventListener('submit', function (e) {
 
     if (classBlocked) {
