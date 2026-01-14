@@ -18,6 +18,7 @@
         'views/return_laptop_view.xml',
         'views/kelas_view.xml',
         'views/product_view.xml',
+        'views/stock_view.xml',
         'views/menuitems.xml',
         'views/borrow_form_template.xml',
         'views/return_form_template.xml',

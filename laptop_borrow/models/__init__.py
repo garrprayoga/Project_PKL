@@ -4,3 +4,4 @@ from . import borrow_laptop
 from . import kelas
 from . import product_inherit
 from . import return_laptop
+from . import stock_lot_inherit

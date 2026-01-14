@@ -7,24 +7,27 @@
     <menuitem id="menu_kelas"
               name="Data Kelas"
               parent="menu_laptop_root"
-              action="action_kelas"/>
+              action="action_kelas"
+              sequence="10"/>
 
     <menuitem id="menu_borrow_laptop"
               name="Peminjaman Laptop"
               parent="menu_laptop_root"
-              action="action_borrow_laptop"/>
+              action="action_borrow_laptop"
+              sequence="20"/>
 
     
     <menuitem id="menu_return_laptop"
               name="Pengembalian Laptop"
               parent="menu_laptop_root"
               action="action_return_laptop"
-              sequence="20"/>
+              sequence="30"/>
 
-    <menuitem id="menu_laptop_available"
+    
+    <menuitem id="menu_available_laptops"
               name="Laptop Tersedia"
-              action="action_available_laptop_serials"
-            groups="stock.group_stock_user"/>
-
+              parent="menu_laptop_root"
+              action="action_available_laptops"
+              sequence="40" />
 
 </odoo>
