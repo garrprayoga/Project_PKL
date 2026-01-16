@@ -5,39 +5,28 @@ class ReturnLaptop(models.Model):
     _name = 'return.laptop'
     _description = 'Pengembalian Laptop'
 
-    class_id = fields.Many2one(
-        'kelas',
-        string="Kelas",
-        required=True
-    )
-
+    class_id = fields.Many2one('kelas', string="Kelas", required=True)
     borrower_id = fields.Many2one(
         'res.partner',
         string="Nama Peminjam",
         required=True,
         domain="[('is_student','=',True),('class_id','=',class_id)]"
     )
-
     borrow_id = fields.Many2one(
         'borrow.laptop',
         string="Kode Peminjaman",
         required=True,
         domain="[('borrower_id','=',borrower_id),('status','=','dipinjam')]"
     )
-
-    return_date = fields.Datetime(
-        string="Tanggal Pengembalian",
-        default=fields.Datetime.now
-    )
-
+    return_date = fields.Datetime(string="Tanggal Pengembalian", default=fields.Datetime.now)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('done', 'Selesai'),
     ], string="Status", default='draft', tracking=True)
-
     note = fields.Text(string='Catatan Pengembalian')
 
-    
+    # Field baru untuk bukti pengembalian
+    image = fields.Image(string="Bukti Pengembalian")
 
     def action_confirm_return(self):
         """Ubah status peminjaman jadi dikembalikan"""

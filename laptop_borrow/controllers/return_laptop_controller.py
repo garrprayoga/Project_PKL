@@ -1,6 +1,7 @@
 from odoo import http
 from odoo.http import request
 import json
+import base64
 
 
 class ReturnLaptopController(http.Controller):
@@ -16,7 +17,6 @@ class ReturnLaptopController(http.Controller):
     # siswa per kelas
     @http.route('/get_students_by_class_return', type='http', auth='public', csrf=False)
     def get_students_by_class_return(self, **kwargs):
-
         body = request.httprequest.get_data(as_text=True)
         data = json.loads(body) if body else {}
 
@@ -42,7 +42,6 @@ class ReturnLaptopController(http.Controller):
     # kode peminjaman per siswa
     @http.route('/get_borrows_by_student', type='http', auth='public', csrf=False)
     def get_borrows_by_student(self, **kwargs):
-
         body = request.httprequest.get_data(as_text=True)
         data = json.loads(body) if body else {}
 
@@ -81,13 +80,20 @@ class ReturnLaptopController(http.Controller):
         borrow_id = int(post.get('borrow_id'))
         note = post.get('note')
 
+        # AMBIL FILE GAMBAR
+        image_file = request.httprequest.files.get('image')
+        image_data = base64.b64encode(image_file.read()) if image_file else None
+
+        # CREATE RECORD RETURN
         return_laptop = request.env['return.laptop'].sudo().create({
             'class_id': class_id,
             'borrower_id': borrower_id,
             'borrow_id': borrow_id,
-            'note': note
+            'note': note,
+            'image': image_data,  # field Binary untuk gambar
         })
 
+        # KONFIRMASI PENGEMBALIAN
         return_laptop.action_confirm_return()
 
         return request.redirect('/form/pengembalian/success')

@@ -15,7 +15,7 @@
           </div>
         </t>
 
-        <form action="/form/pengembalian/submit" method="POST">
+        <form action="/form/pengembalian/submit" method="POST" enctype="multipart/form-data">
           <!-- TAMBAHKAN CSRF TOKEN -->
           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
@@ -44,18 +44,34 @@
             <select name="borrow_id" id="borrow_id" class="form-control" required="required">
               <option value="">-- Pilih Kode Peminjaman --</option>
             </select>
-            <small class="text-muted">Hanya menampilkan peminjaman aktif milik siswa terpilih</small>
+            <small class="text-muted">Hanya menampilkan peminjaman aktif</small>
           </div>
           
           <!-- CATATAN -->
-          <div class="form-group mt-2 ">
+          <div class="form-group mb-3">
             <label>Catatan Pengembalian</label>
-            <textarea name="note" class="form-control" ></textarea>
+            <textarea name="note" class="form-control" required="required"></textarea>
             <small class="text-muted">Catatan bila ada kerusakan</small>
           </div>
 
+          <!-- BUKTI PENGEMBALIAN (CAMERA ONLY) -->
+          <div class="form-group mb-3">
+            <label>Ambil Foto Bukti Pengembalian</label>
+            <input type="file"
+                   name="image"
+                   id="image"
+                   class="form-control"
+                   accept="image/*"
+                   capture="environment"
+                   required="required"/>
+            <small class="text-muted d-block mt-1">
+              Ambil foto bukti pengembalian laptop
+            </small>
+            <img id="image_preview" style="display:none; max-width:200px; margin-top:10px;" />
+          </div>
+
           <div class="form-group mt-4">
-          <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
+            <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
           </div>
 
           <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
@@ -68,7 +84,6 @@
   <t t-call="website.layout">
     <div class="container text-center mt-5 mb-5">
 
-      <!-- GAMBAR SUCCESS -->
       <img src="/laptop_borrow/static/src/img/success.png"
            alt="Pengembalian Berhasil"
            class="success-img mb-3"/>

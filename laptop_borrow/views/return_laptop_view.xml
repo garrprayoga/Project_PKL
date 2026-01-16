@@ -21,6 +21,7 @@
                         <field name="borrow_id"/>
                         <field name="return_date"/>
                         <field name="note"/>
+                        <field name="image" widget="image" class="oe_avatar"/>
                     </group>
                 </sheet>
             </form>

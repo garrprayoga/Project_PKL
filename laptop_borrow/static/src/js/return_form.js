@@ -2,13 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const classSelect = document.getElementById('class_id');
     const studentSelect = document.getElementById('borrower_id');
     const borrowSelect = document.getElementById('borrow_id');
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image_preview');
 
-   
     // 1. LOAD STUDENT BY CLASS
-   
     classSelect?.addEventListener('change', async function () {
         const classId = this.value;
-
         studentSelect.innerHTML = '<option value="">-- Memuat... --</option>';
         borrowSelect.innerHTML = '<option value="">-- Pilih Kode Peminjaman --</option>';
 
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const students = await response.json();
             studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
-
             if (students.length > 0) {
                 students.forEach(s => {
                     const opt = document.createElement('option');
@@ -43,12 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    
     // 2. LOAD BORROW CODE BY STUDENT
-
     studentSelect?.addEventListener('change', async function () {
         const borrowerId = this.value;
-
         borrowSelect.innerHTML = '<option value="">-- Memuat... --</option>';
 
         if (!borrowerId) {
@@ -65,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const borrows = await response.json();
             borrowSelect.innerHTML = '<option value="">-- Pilih Kode Peminjaman --</option>';
-
             if (borrows.length > 0) {
                 borrows.forEach(b => {
                     const opt = document.createElement('option');
@@ -79,6 +73,26 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error(error);
             borrowSelect.innerHTML = '<option value="">(Gagal memuat kode)</option>';
+        }
+    });
+
+    // 3. PREVIEW IMAGE DARI KAMERA
+    imageInput?.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            // Pastikan file memang gambar
+            if (!file.type.startsWith('image/')) {
+                alert('File harus berupa gambar!');
+                this.value = '';
+                imagePreview.style.display = 'none';
+                return;
+            }
+            // Preview
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = 'block';
+        } else {
+            imagePreview.style.display = 'none';
+            alert('Foto wajib diambil dari kamera langsung!');
         }
     });
 });
