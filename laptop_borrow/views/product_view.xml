@@ -6,8 +6,8 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <sheet position="inside">
-                <group string="Laptop Info">
-                    <field name="is_laptop"/>
+                <group string="Info">
+                    <field name="is_borrowable"/>
                 </group>
             </sheet>
         </field>

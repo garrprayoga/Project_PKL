@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 
 class BorrowLaptopLine(models.Model):
     _name = 'borrow.laptop.line'
-    _description = 'Detail Laptop yang Dipinjam'
+    _description = 'Detail Barang yang Dipinjam'
 
     borrow_id = fields.Many2one(
         'borrow.laptop',
@@ -15,13 +15,13 @@ class BorrowLaptopLine(models.Model):
 
     laptop_serial_id = fields.Many2one(
         'stock.lot',
-        string="Nomor Laptop (Serial)",
+        string="Nomor Serial Barang",
         required=True,
-        domain="[('product_id.product_tmpl_id.is_laptop','=',True)]"
+        domain="[('product_id.product_tmpl_id.is_borrowable','=',True)]"
     )
 
   
-    # VALIDASI
+    # VALIDASI: Cek asset tidak double dipinjam
     @api.constrains('laptop_serial_id')
     def _check_laptop_not_double(self):
         for line in self:
@@ -36,6 +36,6 @@ class BorrowLaptopLine(models.Model):
 
             if conflict:
                 raise ValidationError(
-                    f"Laptop dengan serial '{line.laptop_serial_id.name}' "
+                    f"Barang dengan serial '{line.laptop_serial_id.name}' "
                     f"sedang dipinjam dan tidak bisa dipilih."
                 )

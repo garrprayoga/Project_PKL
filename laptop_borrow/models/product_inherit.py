@@ -1,6 +1,10 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class ProductInherit(models.Model):
     _inherit = 'product.template'
-
-    is_laptop = fields.Boolean(string="Laptop", help="Centang jika produk ini adalah laptop.")
+    
+    is_borrowable = fields.Boolean(
+        string="Bisa Dipinjam", 
+        default=False,
+        help="Centang jika produk ini bisa dipinjam"
+    )

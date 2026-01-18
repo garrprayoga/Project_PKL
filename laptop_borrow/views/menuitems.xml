@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <menuitem id="menu_laptop_root"
-              name="Laptop Borrow System"
+              name="Sistem Peminjaman dan Pengembalian Barang"
               sequence="1"/>
 
     <menuitem id="menu_kelas"
@@ -11,21 +11,21 @@
               sequence="10"/>
 
     <menuitem id="menu_borrow_laptop"
-              name="Peminjaman Laptop"
+              name="Peminjaman Barang"
               parent="menu_laptop_root"
               action="action_borrow_laptop"
               sequence="20"/>
 
     
     <menuitem id="menu_return_laptop"
-              name="Pengembalian Laptop"
+              name="Pengembalian Barang"
               parent="menu_laptop_root"
               action="action_return_laptop"
               sequence="30"/>
 
     
     <menuitem id="menu_available_laptops"
-              name="Laptop Tersedia"
+              name="Barang Tersedia"
               parent="menu_laptop_root"
               action="action_available_laptops"
               sequence="40" />

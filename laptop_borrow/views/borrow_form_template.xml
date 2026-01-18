@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="borrow_form_template" name="Form Peminjaman Laptop">
+  <template id="borrow_form_template" name="Form Peminjaman Barang">
     <t t-call="website.layout">
-
       <script type="text/javascript" src="/laptop_borrow/static/src/js/borrow_form.js"></script>
 
       <div class="container mt-5 mb-5 borrow-form-card">
-        <h2 class="text-center mb-4">Form Peminjaman Laptop</h2>
+        <h2 class="text-center mb-4">Form Peminjaman Barang</h2>
+
+        <t t-if="error">
+          <div class="alert alert-danger mt-3">
+            <t t-esc="error"/>
+          </div>
+        </t>
 
         <form id="borrow-form" action="/form/peminjaman/submit" method="post">
           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
           <!-- KELAS -->
           <div class="form-group mt-2">
-            <label>Kelas</label>
+            <label>Kelas <span class="text-danger">*</span></label>
             <select id="class_id" name="class_id" class="form-control" required="required">
               <option value="">-- Pilih Kelas --</option>
               <t t-foreach="kelas" t-as="k">
@@ -24,15 +29,26 @@
 
           <!-- SISWA -->
           <div class="form-group mt-2">
-            <label>Nama Siswa</label>
+            <label>Nama Siswa <span class="text-danger">*</span></label>
             <select id="borrower_id" name="borrower_id" class="form-control" required="required">
               <option value="">-- Pilih Nama --</option>
             </select>
           </div>
 
+          <!-- JENIS BARANG (PRODUCT TEMPLATE) -->
+          <div class="form-group mt-2">
+            <label>Jenis Barang <span class="text-danger">*</span></label>
+            <select id="product_id" name="product_id" class="form-control" required="required">
+              <option value="">-- Pilih Jenis Barang --</option>
+              <t t-foreach="products" t-as="product">
+                <option t-att-value="product.id"><t t-esc="product.name"/></option>
+              </t>
+            </select>
+          </div>
+
           <!-- TUJUAN -->
           <div class="form-group mt-2">
-            <label>Tujuan Peminjaman</label>
+            <label>Tujuan Peminjaman <span class="text-danger">*</span></label>
             <select name="tujuan_peminjaman" id="tujuan_peminjaman" class="form-control" required="required">
               <option value="">-- Pilih Tujuan --</option>
               <option value="kbm">KBM</option>
@@ -42,65 +58,66 @@
 
           <!-- GURU MAPEL -->
           <div class="form-group mt-2" id="mapel_field" style="display:none;">
-            <label>Guru Mata Pelajaran</label>
+            <label>Guru Mata Pelajaran <span class="text-danger">*</span></label>
             <input type="text" name="guru_mapel" class="form-control" />
           </div>
 
           <!-- KETERANGAN -->
           <div class="form-group mt-2" id="keterangan_field" style="display:none;">
-            <label>Keterangan</label>
-            <textarea name="keterangan" class="form-control" ></textarea>
+            <label>Keterangan <span class="text-danger">*</span></label>
+            <textarea name="keterangan" class="form-control"></textarea>
           </div>
 
           <!-- JUMLAH -->
           <div class="form-group mt-3">
-            <label>Jumlah Laptop</label>
+            <label>Jumlah Barang <span class="text-danger">*</span></label>
             <input type="number" id="jumlah_pinjam" name="jumlah_pinjam" class="form-control"
-                   min="1" placeholder="Masukkan jumlah laptop yang ingin dipinjam" required="required"/>
+                   min="1" max="20" value="1" placeholder="Masukkan jumlah asset" required="required"/>
           </div>
 
-          <!-- PILIH SERIAL -->
+          <!-- DYNAMIC SERIAL CONTAINER (BOOTSTRAP STYLE) -->
           <div class="form-group mt-3">
-            <label class="form-label fw-bold">Pilih Laptop (Nomor Seri)</label>
-            <div class="list-group" 
-                 style="max-height: calc(2.6em * 5); overflow-y: auto; border: 1px solid #ddd; border-radius: 5px;">
-              <t t-foreach="lots" t-as="lot">
-                <label class="list-group-item d-flex align-items-center" style="height: 2.6em;">
-                  <input type="checkbox"
-                         class="form-check-input me-2 laptop-checkbox"
-                         name="lot_id"
-                         t-att-value="lot.id"
-                         t-att-id="'lot_' + str(lot.id)"
-                         required="required" />
-                  <t t-esc="lot.name"/>
-                </label>
-              </t>
+            <label class="form-label fw-bold">Pilih Asset (Nomor Seri) <span class="text-danger">*</span></label>
+            <div id="serial_container" class="list-group" 
+                 style="max-height: 250px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;">
+              <div class="list-group-item text-center text-muted">
+                <small>Pilih Jenis Barang → Serial akan muncul otomatis</small>
+              </div>
             </div>
-            <small class="text-muted">Scroll ke bawah untuk melihat laptop lainnya</small>
+            <small class="text-muted mt-1 d-block">Centang tepat sesuai jumlah yang diminta</small>
           </div>
 
-          <button type="submit" id= "submit-btn" class="btn btn-primary mt-3">Kirim</button>
-
+          <button type="submit" id="submit-btn" class="btn btn-primary mt-3 w-100">Kirim Peminjaman</button>
           <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
         </form>
       </div>
     </t>
   </template>
 
-    <template id="borrow_success_template" name="Borrow Success">
-      <t t-call="website.layout">
-        <div class="container mt-5 text-center">
+  <template id="borrow_success_template" name="Borrow Success">
+    <t t-call="website.layout">
+      <div class="container mt-5 text-center">
+        <!-- GAMBAR SUCCESS -->
+        <img src="/laptop_borrow/static/src/img/success.png"
+             alt="Peminjaman Berhasil"
+             class="success-img mb-3"
+             style="max-width: 300px;"/>
 
-          <!-- GAMBAR SUCCESS -->
-          <img src="/laptop_borrow/static/src/img/success.png"
-              alt="Peminjaman Berhasil"
-              class="success-img mb-3"/>
+        <h3 class="text-success">Peminjaman Berhasil! ✓</h3>
+        <p class="lead">Terima kasih telah mengisi form peminjaman.</p>
 
-          <h3>Peminjaman berhasil dikirim!</h3>
-          <p>Terima kasih telah mengisi form peminjaman.</p>
-
-          <a href="/" class="btn btn-secondary mt-3">Kembali ke Homepage</a>
+        <div class="card mt-4 mx-auto" style="max-width: 500px;">
+          <div class="card-body">
+            <h5 class="card-title">Detail Peminjaman</h5>
+            <hr/>
+            <p class="mb-2"><strong>Nama Peminjam:</strong> <t t-esc="borrower_name"/></p>
+            <p class="mb-2"><strong>Kode Peminjaman:</strong> <span class="badge bg-primary"><t t-esc="borrow_code"/></span></p>
+            <p class="mb-0"><strong>Jenis Barang:</strong> <t t-esc="product_name"/></p>
+          </div>
         </div>
-      </t>
-    </template>
+
+        <a href="/" class="btn btn-secondary mt-4">Kembali ke Homepage</a>
+      </div>
+    </t>
+  </template>
 </odoo>

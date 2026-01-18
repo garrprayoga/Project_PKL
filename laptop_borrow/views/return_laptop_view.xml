@@ -4,7 +4,7 @@
         <field name="name">return.laptop.form</field>
         <field name="model">return.laptop</field>
         <field name="arch" type="xml">
-            <form string="Pengembalian Laptop">
+            <form string="Pengembalian Barang">
                 <header>
                     <button name="action_confirm_return"
                             type="object"
@@ -43,7 +43,7 @@
     </record>
 
     <record id="action_return_laptop" model="ir.actions.act_window">
-        <field name="name">Pengembalian Laptop</field>
+        <field name="name">Pengembalian Barang</field>
         <field name="res_model">return.laptop</field>
         <field name="view_mode">tree,form</field>
     </record>

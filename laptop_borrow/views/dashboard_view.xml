@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. ACTION (FIXED) -->
+    <record id="action_laptop_dashboard" model="ir.actions.act_window">
+        <field name="name">📊 Dashboard Laptop</field>
+        <field name="res_model">laptop.dashboard</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <!-- 2. FORM VIEW -->
+    <record id="view_laptop_dashboard_form" model="ir.ui.view">
+        <field name="name">laptop.dashboard.form</field>
+        <field name="model">laptop.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard Monitoring Laptop">
+                <sheet>
+                    <div class="row">
+                        <!-- TOTAL -->
+                        <div class="col-md-3">
+                            <div class="panel bg-primary text-white p-3">
+                                <h5 class="text-white">Total Laptop</h5>
+                                <h2 class="text-white"><field name="total_laptop"/></h2>
+                            </div>
+                        </div>
+                        
+                        <!-- TERSEDIA -->
+                        <div class="col-md-3">
+                            <div class="panel bg-success text-white p-3">
+                                <h5 class="text-white">Tersedia</h5>
+                                <h2 class="text-white"><field name="available_laptop"/></h2>
+                            </div>
+                        </div>
+                        
+                        <!-- DIPINJAM -->
+                        <div class="col-md-3">
+                            <div class="panel bg-warning text-white p-3">
+                                <h5 class="text-white">Dipinjam</h5>
+                                <h2 class="text-white"><field name="borrowed_laptop"/></h2>
+                            </div>
+                        </div>
+                        
+                        <!-- % -->
+                        <div class="col-md-3">
+                            <div class="panel bg-danger text-white p-3">
+                                <h5 class="text-white">Tingkat Pinjam</h5>
+                                <h3 class="text-white"><field name="borrowing_rate"/>%</h3>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- 3. MENU (sequence 0 = paling atas) -->
+    <menuitem id="menu_laptop_dashboard"
+              name="📊 Dashboard"
+              parent="menu_laptop_root"
+              action="action_laptop_dashboard"
+              sequence="0"/>
+</odoo>

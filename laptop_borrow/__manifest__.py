@@ -28,7 +28,7 @@
     'assets': {
         'web.assets_frontend': [
             '/laptop_borrow/static/src/css/homepage.css',
-            '/laptop_borrow/static/src/js/borrow_form.js',
+            # '/laptop_borrow/static/src/js/borrow_form.js',
             '/laptop_borrow/static/src/js/return_form.js',
         ],
     },
