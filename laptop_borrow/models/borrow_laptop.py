@@ -2,24 +2,34 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 from datetime import date
 
+
 class BorrowLaptop(models.Model):
     _name = 'borrow.laptop'
     _description = 'Peminjaman Asset'
 
     name = fields.Char(string="Kode Peminjaman", readonly=True, copy=False, default=lambda self: "New")
     
-    class_id = fields.Many2one('kelas', string="Kelas", required=True)
-    product_tmpl_id = fields.Many2one(  # UBAH: product.category → product.template
-        'product.template', 
-        string="Jenis Barang", 
-        required=True,
-        domain="[('is_borrowable', '=', True)]"
+    # ========== HIERARCHY BARU ==========
+    tingkat_id = fields.Many2one('tingkat.sekolah', string="Tingkat", required=True)
+    jurusan_id = fields.Many2one('jurusan.sekolah', string="Jurusan", required=True)
+    # ===================================
+    
+    class_id = fields.Many2one('kelas', string="Kelas", required=True,
     )
+    
+
     borrower_id = fields.Many2one(
         'res.partner', 
         string="Nama Peminjam", 
         required=True, 
         domain="[('is_student','=',True),('class_id','=',class_id)]"
+    )
+
+    product_tmpl_id = fields.Many2one(
+        'product.template', 
+        string="Jenis Barang", 
+        required=True,
+        domain="[('is_borrowable', '=', True)]"
     )
     
     tujuan_peminjaman = fields.Selection([
@@ -73,31 +83,3 @@ class BorrowLaptop(models.Model):
             self.keterangan = False
         elif self.tujuan_peminjaman == 'lainnya':
             self.guru_mapel = False
-
-class BorrowLaptopLine(models.Model):
-    _name = 'borrow.laptop.line'
-    _description = 'Detail Asset yang Dipinjam'
-
-    borrow_id = fields.Many2one('borrow.laptop', string="Peminjaman", ondelete='cascade', required=True)
-    laptop_serial_id = fields.Many2one(
-        'stock.lot', 
-        string="Nomor Serial", 
-        required=True
-    )
-
-    @api.constrains('laptop_serial_id')
-    def _check_asset_not_double(self):
-        for line in self:
-            if not line.laptop_serial_id or not line.borrow_id:
-                continue
-            conflict = self.env['borrow.laptop.line'].search([
-                ('laptop_serial_id', '=', line.laptop_serial_id.id),
-                ('borrow_id.status', '=', 'dipinjam'),
-                ('id', '!=', line.id),
-                ('borrow_id.product_tmpl_id', '=', line.borrow_id.product_tmpl_id.id)  # UBAH
-            ], limit=1)
-            if conflict:
-                raise ValidationError(
-                    f"Asset dengan serial '{line.laptop_serial_id.name}' "
-                    f"sedang dipinjam dan tidak bisa dipilih."
-                )

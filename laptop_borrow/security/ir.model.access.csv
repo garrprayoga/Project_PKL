@@ -4,3 +4,5 @@ access_borrow_laptop_line,borrow.laptop_line,model_borrow_laptop_line,,1,1,1,1
 access_kelas,kelas,model_kelas,,1,1,1,1
 access_return_laptop,return.laptop,model_return_laptop,,1,1,1,1
 access_stock_lot_laptop,access_stock_lot_laptop,model_stock_lot,stock.group_stock_user,1,1,1,1
+access_tingkat_sekolah,tingkat.sekolah,model_tingkat_sekolah,,1,1,1,1
+access_jurusan_sekolah,jurusan.sekolah,model_jurusan_sekolah,,1,1,1,1

@@ -4,30 +4,47 @@
               name="Sistem Peminjaman dan Pengembalian Barang"
               sequence="1"/>
 
+    <!-- MASTER DATA DI DRAWER -->
+    <menuitem id="menu_master_root"
+              name="Master Data Sekolah"
+              parent="menu_laptop_root"
+              sequence="5"/>
+
+    <!-- TINGKAT & JURUSAN - SAJA MENUITEM (action di view file) -->
+    <menuitem id="menu_tingkat_sekolah"
+              name="Tingkat Sekolah"
+              parent="menu_master_root"
+              action="action_tingkat_sekolah"
+              sequence="10"/>
+
+    <menuitem id="menu_jurusan_sekolah"
+              name="Jurusan Sekolah"
+              parent="menu_master_root"
+              action="action_jurusan_sekolah"
+              sequence="20"/>
+
+    <!-- OPERASIONAL DI NAVBAR -->
     <menuitem id="menu_kelas"
               name="Data Kelas"
               parent="menu_laptop_root"
               action="action_kelas"
-              sequence="10"/>
+              sequence="30"/>  <!-- ACTION UDAH ADA DI KELAS VIEW -->
 
     <menuitem id="menu_borrow_laptop"
               name="Peminjaman Barang"
               parent="menu_laptop_root"
               action="action_borrow_laptop"
-              sequence="20"/>
+              sequence="40"/>
 
-    
     <menuitem id="menu_return_laptop"
               name="Pengembalian Barang"
               parent="menu_laptop_root"
               action="action_return_laptop"
-              sequence="30"/>
+              sequence="50"/>
 
-    
     <menuitem id="menu_available_laptops"
               name="Barang Tersedia"
               parent="menu_laptop_root"
               action="action_available_laptops"
-              sequence="40" />
-
+              sequence="60"/>
 </odoo>

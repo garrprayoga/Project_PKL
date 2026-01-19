@@ -10,72 +10,96 @@
 
         <!-- TAMBAHKAN ERROR DISPLAY -->
         <t t-if="error">
-          <div class="alert alert-danger">
-            <strong>⚠ Kesalahan:</strong> <span t-esc="error"/>
-          </div>
+         <div class="alert alert-danger">
+           <strong>⚠ Kesalahan:</strong> <span t-esc="error"/>
+         </div>
         </t>
 
         <form action="/form/pengembalian/submit" method="POST" enctype="multipart/form-data">
-          <!-- TAMBAHKAN CSRF TOKEN -->
-          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+         <!-- TAMBAHKAN CSRF TOKEN -->
+         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-          <!-- KELAS -->
-          <div class="form-group mb-3">
-            <label for="class_id">Kelas</label>
-            <select name="class_id" id="class_id" class="form-control" required="required">
-              <option value="">-- Pilih Kelas --</option>
-              <t t-foreach="classes" t-as="kelas">
-                <option t-att-value="kelas.id"><t t-esc="kelas.name"/></option>
-              </t>
-            </select>
-          </div>
+         <!-- ========== HIERARCHY BARU ==========
+         TINGKATAN + JURUSAN + KELAS -->
+         <div class="row">
+           <!-- TINGKATAN -->
+           <div class="col-md-4">
+             <div class="form-group mb-3">
+               <label>Tingkatan <span class="text-danger">*</span></label>
+               <select id="tingkat_id" name="tingkat_id" class="form-control" required="required">
+                 <option value="">-- Pilih Tingkatan --</option>
+               </select>
+             </div>
+           </div>
 
-          <!-- SISWA -->
-          <div class="form-group mb-3">
-            <label>Nama Siswa</label>
-            <select id="borrower_id" name="borrower_id" class="form-control" required="required">
-              <option value="">-- Pilih Nama --</option>
-            </select>
-          </div>
+           <!-- JURUSAN -->
+           <div class="col-md-4">
+             <div class="form-group mb-3">
+               <label>Jurusan <span class="text-danger">*</span></label>
+               <select id="jurusan_id" name="jurusan_id" class="form-control" required="required">
+                 <option value="">-- Pilih Jurusan --</option>
+               </select>
+             </div>
+           </div>
 
-          <!-- KODE PEMINJAMAN -->
-          <div class="form-group mb-3">
-            <label for="borrow_id">Kode Peminjaman</label>
-            <select name="borrow_id" id="borrow_id" class="form-control" required="required">
-              <option value="">-- Pilih Kode Peminjaman --</option>
-            </select>
-            <small class="text-muted">Hanya menampilkan peminjaman aktif</small>
-          </div>
-          
-          <!-- CATATAN -->
-          <div class="form-group mb-3">
-            <label>Catatan Pengembalian</label>
-            <textarea name="note" class="form-control" required="required"></textarea>
-            <small class="text-muted">Catatan bila ada kerusakan</small>
-          </div>
+           <!-- KELAS (DYNAMIC) -->
+           <div class="col-md-4">
+             <div class="form-group mb-3">
+               <label>Kelas <span class="text-danger">*</span></label>
+               <select name="class_id" id="class_id" class="form-control" required="required">
+                 <option value="">-- Pilih Kelas --</option>
+               </select>
+             </div>
+           </div>
+         </div>
+         <!-- ===================================== -->
 
-          <!-- BUKTI PENGEMBALIAN (CAMERA ONLY) -->
-          <div class="form-group mb-3">
-            <label>Ambil Foto Bukti Pengembalian</label>
-            <input type="file"
-                   name="image"
-                   id="image"
-                   class="form-control"
-                   accept="image/*"
-                   capture="environment"
-                   required="required"/>
-            <small class="text-muted d-block mt-1">
-              Ambil foto bukti pengembalian laptop
-            </small>
-            <img id="image_preview" style="display:none; max-width:200px; margin-top:10px;" />
-          </div>
+         <!-- SISWA -->
+         <div class="form-group mb-3">
+           <label>Nama Siswa <span class="text-danger">*</span></label>
+           <select id="borrower_id" name="borrower_id" class="form-control" required="required">
+             <option value="">-- Pilih Nama --</option>
+           </select>
+         </div>
 
-          <div class="form-group mt-4">
-            <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
-          </div>
+         <!-- KODE PEMINJAMAN -->
+         <div class="form-group mb-3">
+           <label for="borrow_id">Kode Peminjaman <span class="text-danger">*</span></label>
+           <select name="borrow_id" id="borrow_id" class="form-control" required="required">
+             <option value="">-- Pilih Kode Peminjaman --</option>
+           </select>
+           <small class="text-muted">Hanya menampilkan peminjaman aktif</small>
+         </div>
+         
+         <!-- CATATAN -->
+         <div class="form-group mb-3">
+           <label>Catatan Pengembalian</label>
+           <textarea name="note" class="form-control" required="required"></textarea>
+           <small class="text-muted">Catatan bila ada kerusakan</small>
+         </div>
 
-          <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
-        </form>
+         <!-- BUKTI PENGEMBALIAN (CAMERA ONLY) -->
+         <div class="form-group mb-3">
+           <label>Ambil Foto Bukti Pengembalian <span class="text-danger">*</span></label>
+           <input type="file"
+                  name="image"
+                  id="image"
+                  class="form-control"
+                  accept="image/*"
+                  capture="environment"
+                  required="required"/>
+           <small class="text-muted d-block mt-1">
+             Ambil foto bukti pengembalian laptop
+           </small>
+           <img id="image_preview" style="display:none; max-width:200px; margin-top:10px;" />
+         </div>
+
+         <div class="form-group mt-4">
+           <button type="submit" class="btn btn-primary w-100">Kembalikan Laptop</button>
+         </div>
+
+         <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
+       </form>
       </div>
     </t>
   </template>

@@ -4,7 +4,61 @@ import json
 import base64
 
 
+
 class ReturnLaptopController(http.Controller):
+
+    # ========== HIERARCHY ROUTES BARU ==========
+    @http.route('/get_tingkat_return', type='http', auth='public', csrf=False, methods=['POST'])
+    def get_tingkat_return(self, **kwargs):
+        """AJAX load list tingkatan (X, XI, XII, XIII)"""
+        tingkat = request.env['tingkat.sekolah'].sudo().search([('active', '=', True)])
+        result = [{'id': t.id, 'name': t.name} for t in tingkat]
+        return request.make_response(
+            json.dumps(result),
+            headers=[('Content-Type', 'application/json')]
+        )
+
+    @http.route('/get_jurusan_return', type='http', auth='public', csrf=False, methods=['POST'])
+    def get_jurusan_return(self, **kwargs):
+        """AJAX load list jurusan by tingkatan"""
+        body = request.httprequest.get_data(as_text=True)
+        data = json.loads(body) if body else {}
+        
+        tingkat_id = data.get('tingkat_id')
+        domain = [('active', '=', True)]
+        if tingkat_id:
+            domain.append(('id', '=', int(tingkat_id)))
+            
+        jurusan = request.env['jurusan.sekolah'].sudo().search(domain)
+        result = [{'id': j.id, 'name': j.name} for j in jurusan]
+        
+        return request.make_response(
+            json.dumps(result),
+            headers=[('Content-Type', 'application/json')]
+        )
+
+    @http.route('/get_kelas_return', type='http', auth='public', csrf=False, methods=['POST'])
+    def get_kelas_return(self, **kwargs):
+        """AJAX load kelas by tingkatan + jurusan"""
+        body = request.httprequest.get_data(as_text=True)
+        data = json.loads(body) if body else {}
+        
+        tingkat_id = data.get('tingkat_id')
+        jurusan_id = data.get('jurusan_id')
+        domain = []
+        if tingkat_id:
+            domain.append(('tingkat_id', '=', int(tingkat_id)))
+        if jurusan_id:
+            domain.append(('jurusan_id', '=', int(jurusan_id)))
+            
+        kelas = request.env['kelas'].sudo().search(domain)
+        result = [{'id': k.id, 'name': k.name} for k in kelas]
+        
+        return request.make_response(
+            json.dumps(result),
+            headers=[('Content-Type', 'application/json')]
+        )
+    # ==========================================
 
     # form
     @http.route('/form/pengembalian', auth='public', website=True)
@@ -91,6 +145,10 @@ class ReturnLaptopController(http.Controller):
             'borrow_id': borrow_id,
             'note': note,
             'image': image_data,  # field Binary untuk gambar
+            # ========== HIERARCHY FIELDS ==========
+            'tingkat_id': post.get('tingkat_id'),
+            'jurusan_id': post.get('jurusan_id'),
+            # =====================================
         })
 
         # KONFIRMASI PENGEMBALIAN

@@ -8,88 +8,117 @@
         <h2 class="text-center mb-4">Form Peminjaman Barang</h2>
 
         <t t-if="error">
-          <div class="alert alert-danger mt-3">
-            <t t-esc="error"/>
-          </div>
+         <div class="alert alert-danger mt-3">
+           <t t-esc="error"/>
+         </div>
         </t>
 
         <form id="borrow-form" action="/form/peminjaman/submit" method="post">
-          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-          <!-- KELAS -->
-          <div class="form-group mt-2">
-            <label>Kelas <span class="text-danger">*</span></label>
-            <select id="class_id" name="class_id" class="form-control" required="required">
-              <option value="">-- Pilih Kelas --</option>
-              <t t-foreach="kelas" t-as="k">
-                <option t-att-value="k.id"><t t-esc="k.name"/></option>
-              </t>
-            </select>
-          </div>
+         <!-- ========== HIERARCHY: TINGKAT + JURUSAN + KELAS ========== -->
+         <div class="row">
+           <!-- TINGKATAN -->
+           <div class="col-md-4">
+             <div class="form-group mt-2">
+               <label>Tingkatan <span class="text-danger">*</span></label>
+               <select id="tingkat_id" name="tingkat_id" class="form-control" required="required">
+                 <option value="">-- Pilih Tingkatan --</option>
+                 <t t-foreach="tingkat" t-as="t">
+                   <option t-att-value="t.id"><t t-esc="t.name"/></option>
+                 </t>
+               </select>
+             </div>
+           </div>
 
-          <!-- SISWA -->
-          <div class="form-group mt-2">
-            <label>Nama Siswa <span class="text-danger">*</span></label>
-            <select id="borrower_id" name="borrower_id" class="form-control" required="required">
-              <option value="">-- Pilih Nama --</option>
-            </select>
-          </div>
+           <!-- JURUSAN -->
+           <div class="col-md-4">
+             <div class="form-group mt-2">
+               <label>Jurusan <span class="text-danger">*</span></label>
+               <select id="jurusan_id" name="jurusan_id" class="form-control" required="required">
+                 <option value="">-- Pilih Jurusan --</option>
+                 <t t-foreach="jurusan" t-as="j">
+                   <option t-att-value="j.id"><t t-esc="j.name"/></option>
+                 </t>
+               </select>
+             </div>
+           </div>
 
-          <!-- JENIS BARANG (PRODUCT TEMPLATE) -->
-          <div class="form-group mt-2">
-            <label>Jenis Barang <span class="text-danger">*</span></label>
-            <select id="product_id" name="product_id" class="form-control" required="required">
-              <option value="">-- Pilih Jenis Barang --</option>
-              <t t-foreach="products" t-as="product">
-                <option t-att-value="product.id"><t t-esc="product.name"/></option>
-              </t>
-            </select>
-          </div>
+           <!-- KELAS (DYNAMIC - loaded via AJAX) -->
+           <div class="col-md-4">
+             <div class="form-group mt-2">
+               <label>Kelas <span class="text-danger">*</span></label>
+               <select id="class_id" name="class_id" class="form-control" required="required">
+                 <option value="">-- Pilih Tingkat &amp; Jurusan Dulu --</option>
+               </select>
+             </div>
+           </div>
+         </div>
+         <!-- ============================================================ -->
 
-          <!-- TUJUAN -->
-          <div class="form-group mt-2">
-            <label>Tujuan Peminjaman <span class="text-danger">*</span></label>
-            <select name="tujuan_peminjaman" id="tujuan_peminjaman" class="form-control" required="required">
-              <option value="">-- Pilih Tujuan --</option>
-              <option value="kbm">KBM</option>
-              <option value="lainnya">Lainnya</option>
-            </select>
-          </div>
+         <!-- SISWA (DYNAMIC - loaded via AJAX) -->
+         <div class="form-group mt-2">
+           <label>Nama Siswa <span class="text-danger">*</span></label>
+           <select id="borrower_id" name="borrower_id" class="form-control" required="required">
+             <option value="">-- Pilih Nama --</option>
+           </select>
+         </div>
 
-          <!-- GURU MAPEL -->
-          <div class="form-group mt-2" id="mapel_field" style="display:none;">
-            <label>Guru Mata Pelajaran <span class="text-danger">*</span></label>
-            <input type="text" name="guru_mapel" class="form-control" />
-          </div>
+         <!-- JENIS BARANG -->
+         <div class="form-group mt-2">
+           <label>Jenis Barang <span class="text-danger">*</span></label>
+           <select id="product_id" name="product_id" class="form-control" required="required">
+             <option value="">-- Pilih Jenis Barang --</option>
+             <t t-foreach="products" t-as="product">
+               <option t-att-value="product.id"><t t-esc="product.name"/></option>
+             </t>
+           </select>
+         </div>
 
-          <!-- KETERANGAN -->
-          <div class="form-group mt-2" id="keterangan_field" style="display:none;">
-            <label>Keterangan <span class="text-danger">*</span></label>
-            <textarea name="keterangan" class="form-control"></textarea>
-          </div>
+         <!-- TUJUAN -->
+         <div class="form-group mt-2">
+           <label>Tujuan Peminjaman <span class="text-danger">*</span></label>
+           <select name="tujuan_peminjaman" id="tujuan_peminjaman" class="form-control" required="required">
+             <option value="">-- Pilih Tujuan --</option>
+             <option value="kbm">KBM</option>
+             <option value="lainnya">Lainnya</option>
+           </select>
+         </div>
 
-          <!-- JUMLAH -->
-          <div class="form-group mt-3">
-            <label>Jumlah Barang <span class="text-danger">*</span></label>
-            <input type="number" id="jumlah_pinjam" name="jumlah_pinjam" class="form-control"
-                   min="1" max="20" value="1" placeholder="Masukkan jumlah asset" required="required"/>
-          </div>
+         <!-- GURU MAPEL -->
+         <div class="form-group mt-2" id="mapel_field" style="display:none;">
+           <label>Guru Mata Pelajaran <span class="text-danger">*</span></label>
+           <input type="text" name="guru_mapel" class="form-control" />
+         </div>
 
-          <!-- DYNAMIC SERIAL CONTAINER (BOOTSTRAP STYLE) -->
-          <div class="form-group mt-3">
-            <label class="form-label fw-bold">Pilih Asset (Nomor Seri) <span class="text-danger">*</span></label>
-            <div id="serial_container" class="list-group" 
-                 style="max-height: 250px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;">
-              <div class="list-group-item text-center text-muted">
-                <small>Pilih Jenis Barang → Serial akan muncul otomatis</small>
-              </div>
-            </div>
-            <small class="text-muted mt-1 d-block">Centang tepat sesuai jumlah yang diminta</small>
-          </div>
+         <!-- KETERANGAN -->
+         <div class="form-group mt-2" id="keterangan_field" style="display:none;">
+           <label>Keterangan <span class="text-danger">*</span></label>
+           <textarea name="keterangan" class="form-control"></textarea>
+         </div>
 
-          <button type="submit" id="submit-btn" class="btn btn-primary mt-3 w-100">Kirim Peminjaman</button>
-          <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
-        </form>
+         <!-- JUMLAH -->
+         <div class="form-group mt-3">
+           <label>Jumlah Barang <span class="text-danger">*</span></label>
+           <input type="number" id="jumlah_pinjam" name="jumlah_pinjam" class="form-control"
+                  min="1" max="20" value="1" placeholder="Masukkan jumlah asset" required="required"/>
+         </div>
+
+         <!-- DYNAMIC SERIAL CONTAINER -->
+         <div class="form-group mt-3">
+           <label class="form-label fw-bold">Pilih Asset (Nomor Seri) <span class="text-danger">*</span></label>
+           <div id="serial_container" class="list-group" 
+                style="max-height: 250px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; min-height: 100px;">
+             <div class="list-group-item text-center text-muted">
+               <small>Pilih Jenis Barang → Serial akan muncul otomatis</small>
+             </div>
+           </div>
+           <small class="text-muted mt-1 d-block">Centang tepat sesuai jumlah yang diminta</small>
+         </div>
+
+         <button type="submit" id="submit-btn" class="btn btn-primary mt-3 w-100">Kirim Peminjaman</button>
+         <a href="/" class="btn btn-secondary mt-2 w-100">⬅ Kembali ke Homepage</a>
+       </form>
       </div>
     </t>
   </template>
@@ -107,13 +136,13 @@
         <p class="lead">Terima kasih telah mengisi form peminjaman.</p>
 
         <div class="card mt-4 mx-auto" style="max-width: 500px;">
-          <div class="card-body">
-            <h5 class="card-title">Detail Peminjaman</h5>
-            <hr/>
-            <p class="mb-2"><strong>Nama Peminjam:</strong> <t t-esc="borrower_name"/></p>
-            <p class="mb-2"><strong>Kode Peminjaman:</strong> <span class="badge bg-primary"><t t-esc="borrow_code"/></span></p>
-            <p class="mb-0"><strong>Jenis Barang:</strong> <t t-esc="product_name"/></p>
-          </div>
+         <div class="card-body">
+           <h5 class="card-title">Detail Peminjaman</h5>
+           <hr/>
+           <p class="mb-2"><strong>Nama Peminjam:</strong> <t t-esc="borrower_name"/></p>
+           <p class="mb-2"><strong>Kode Peminjaman:</strong> <span class="badge bg-primary"><t t-esc="borrow_code"/></span></p>
+           <p class="mb-0"><strong>Jenis Barang:</strong> <t t-esc="product_name"/></p>
+         </div>
         </div>
 
         <a href="/" class="btn btn-secondary mt-4">Kembali ke Homepage</a>

@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const tingkatSelect = document.getElementById('tingkat_id');
+    const jurusanSelect = document.getElementById('jurusan_id');
     const classSelect   = document.getElementById('class_id');
     const studentSelect = document.getElementById('borrower_id');
     const productSelect = document.getElementById('product_id');
@@ -11,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const form          = document.getElementById('borrow-form');
 
     let classBlocked = false;
+
+    console.log('🚀 Elements found:', {
+        tingkat: !!tingkatSelect,
+        jurusan: !!jurusanSelect,
+        class: !!classSelect
+    });
 
     /* ===============================
        LIMIT CHECKBOX SESUAI JUMLAH
@@ -51,7 +59,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ===============================
-       PILIH KELAS
+       TINGKAT + JURUSAN → LOAD KELAS
+    =============================== */
+    async function loadKelas() {
+        const tingkatId = tingkatSelect?.value;
+        const jurusanId = jurusanSelect?.value;
+        
+        if (!classSelect) return;
+        
+        classSelect.innerHTML = '<option value="">-- Loading... --</option>';
+        studentSelect.innerHTML = '<option value="">-- Pilih Nama --</option>';
+        
+        if (!tingkatId || !jurusanId) {
+            classSelect.innerHTML = '<option value="">-- Pilih Tingkat & Jurusan --</option>';
+            return;
+        }
+
+        try {
+            console.log('🔔 Loading kelas for tingkat:', tingkatId, 'jurusan:', jurusanId);
+            
+            const res = await fetch('/get_kelas_by_tingkat_jurusan', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 
+                    tingkat_id: tingkatId, 
+                    jurusan_id: jurusanId 
+                })
+            });
+            
+            const text = await res.text();
+            console.log('📥 Kelas response:', text);
+            
+            const kelas = JSON.parse(text);
+            
+            classSelect.innerHTML = '<option value="">-- Pilih Kelas --</option>';
+            kelas.forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = k.id;
+                opt.textContent = k.name;
+                classSelect.appendChild(opt);
+            });
+            
+            console.log('✅ Kelas loaded:', kelas.length);
+        } catch (error) {
+            console.error('❌ Error loading kelas:', error);
+            classSelect.innerHTML = '<option value="">-- Error loading --</option>';
+        }
+    }
+
+    // Event listeners untuk tingkat dan jurusan
+    tingkatSelect?.addEventListener('change', loadKelas);
+    jurusanSelect?.addEventListener('change', loadKelas);
+
+    /* ===============================
+       PILIH KELAS → CHECK & LOAD SISWA
     =============================== */
     classSelect?.addEventListener('change', async () => {
         const classId = classSelect.value;

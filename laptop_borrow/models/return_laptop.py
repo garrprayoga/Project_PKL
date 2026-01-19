@@ -1,11 +1,19 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
+
 class ReturnLaptop(models.Model):
     _name = 'return.laptop'
     _description = 'Pengembalian Laptop'
 
-    class_id = fields.Many2one('kelas', string="Kelas", required=True)
+    # ========== HIERARCHY BARU ==========
+    tingkat_id = fields.Many2one('tingkat.sekolah', string="Tingkat", required=True)
+    jurusan_id = fields.Many2one('jurusan.sekolah', string="Jurusan", required=True)
+    # ===================================
+    
+    class_id = fields.Many2one('kelas', string="Kelas", required=True,
+    )
+    
     borrower_id = fields.Many2one(
         'res.partner',
         string="Nama Peminjam",

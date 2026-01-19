@@ -6,10 +6,15 @@
             <field name="arch" type="xml">
                 <form string="Data Kelas">
                     <sheet>
-                        <group>
-                            <field name="name"/>
+                        <!-- ========== HIERARCHY BARU ==========
+                        TINGKATAN + JURUSAN (REQUIRED) -->
+                        <group string="Informasi Kelas" col="4">
+                            <field name="tingkat_id" required="1"/>
+                            <field name="jurusan_id" required="1"/>
+                            <field name="name" required="1"/>
                             <field name="status_pinjam"/>
                         </group>
+                        <!-- ===================================== -->
 
                         <notebook>
                             <page string="Daftar Siswa">
@@ -31,6 +36,8 @@
             <field name="model">kelas</field>
             <field name="arch" type="xml">
                 <tree string="Daftar Kelas">
+                    <field name="tingkat_id"/>
+                    <field name="jurusan_id"/>
                     <field name="name"/>
                     <field name="status_pinjam"/>
                 </tree>
@@ -43,7 +50,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_kelas_root" name="Kelas"/>
-        <menuitem id="menu_kelas_sub" name="Data Kelas" parent="menu_kelas_root" action="action_kelas"/>
+        <!-- HAPUS MENU - SUDAH ADA DI FILE MENU ANDA -->
+        <!-- <menuitem id="menu_kelas_root"... /> -->
     </data>
 </odoo>

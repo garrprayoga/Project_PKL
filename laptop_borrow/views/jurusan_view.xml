@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <!-- FORM VIEW -->
+        <record id="view_jurusan_sekolah_form" model="ir.ui.view">
+            <field name="name">jurusan.sekolah.form</field>
+            <field name="model">jurusan.sekolah</field>
+            <field name="arch" type="xml">
+                <form string="Data Jurusan Sekolah">
+                    <sheet>
+                        <group string="Informasi Jurusan" col="2">
+                            <field name="name" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- TREE VIEW -->
+        <record id="view_jurusan_sekolah_tree" model="ir.ui.view">
+            <field name="name">jurusan.sekolah.tree</field>
+            <field name="model">jurusan.sekolah</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Jurusan Sekolah">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record id="action_jurusan_sekolah" model="ir.actions.act_window">
+            <field name="name">Jurusan Sekolah</field>
+            <field name="res_model">jurusan.sekolah</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

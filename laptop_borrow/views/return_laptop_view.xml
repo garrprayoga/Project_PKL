@@ -15,12 +15,29 @@
                 </header>
 
                 <sheet>
+                    <!-- ========== HIERARCHY BARU ==========
+                    TINGKATAN + JURUSAN + KELAS -->
+                    <group string="Informasi Kelas" col="4">
+                        <field name="tingkat_id" required="1"/>
+                        <field name="jurusan_id" required="1"/>
+                        <field name="class_id" required="1"
+                              domain="[('tingkat_id', '=', tingkat_id), ('jurusan_id', '=', jurusan_id)]"/>
+                    </group>
+                    <!-- ===================================== -->
+
                     <group string="Informasi Pengembalian">
-                        <field name="class_id"/>
-                        <field name="borrower_id"/>
-                        <field name="borrow_id"/>
-                        <field name="return_date"/>
-                        <field name="note"/>
+                        <group>
+                            <field name="borrower_id" 
+                                   domain="[('is_student','=',True),('class_id','=',class_id)]"/>
+                            <field name="borrow_id" 
+                                   domain="[('status','=','dipinjam'),('borrower_id','=',borrower_id)]"/>
+                        </group>
+                        <group>
+                            <field name="return_date"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <group>
                         <field name="image" widget="image" class="oe_avatar"/>
                     </group>
                 </sheet>
@@ -33,6 +50,8 @@
         <field name="model">return.laptop</field>
         <field name="arch" type="xml">
             <tree string="Daftar Pengembalian">
+                <field name="tingkat_id"/>
+                <field name="jurusan_id"/>
                 <field name="class_id"/>
                 <field name="borrower_id"/>
                 <field name="borrow_id"/>   

@@ -1,8 +1,14 @@
 from odoo import models, fields, api
 
+
 class Kelas(models.Model):
     _name = 'kelas'
     _description = 'Data Kelas'
+
+    # ========== HIERARCHY FIELDS ==========
+    tingkat_id = fields.Many2one('tingkat.sekolah', string='Tingkatan', required=True)
+    jurusan_id = fields.Many2one('jurusan.sekolah', string='Jurusan', required=True)
+    # ======================================
 
     name = fields.Char(string="Nama Kelas", required=True)
     status_pinjam = fields.Selection([
