@@ -1,34 +1,78 @@
 <odoo>
-    <!-- TREE VIEW -->
-    <record id="view_available_laptops" model="ir.ui.view">
-        <field name="name">available.laptops.view</field>
-        <field name="model">stock.lot</field>
+
+    <!-- ============================= -->
+    <!-- 1. TREE JENIS BARANG -->
+    <!-- ============================= -->
+    <record id="view_borrowable_product_tree" model="ir.ui.view">
+        <field name="name">borrowable.product.tree</field>
+        <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <tree string="Laptop Tersedia">
+            <tree string="Jenis Barang Bisa Dipinjam">
                 <field name="name"/>
-                <field name="product_id"/>
-                <field name="is_available"/>
+                <field name="is_borrowable"/>
+                <button
+                    name="%(action_product_to_lot)d"
+                    string="Lihat Nomor Seri"
+                    type="action"
+                    class="btn-primary"/>
             </tree>
         </field>
     </record>
 
-    <!-- ACTION dengan DOMAIN -->
-    <record id="action_available_laptops" model="ir.actions.act_window">
-        <field name="name">Laptop Tersedia</field>
+    <!-- ============================= -->
+    <!-- 2. TREE NOMOR SERI -->
+    <!-- ============================= -->
+    <record id="view_available_lot_tree" model="ir.ui.view">
+        <field name="name">available.lot.tree</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <tree string="Nomor Seri Tersedia">
+                <field name="name" string="Nomor Seri"/>
+                <field name="product_id" string="Jenis Barang"/>
+                <field name="is_available" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!-- 3. ACTION KE NOMOR SERI -->
+    <!-- ============================= -->
+    <record id="action_product_to_lot" model="ir.actions.act_window">
+        <field name="name">Nomor Seri Tersedia</field>
         <field name="res_model">stock.lot</field>
         <field name="view_mode">tree</field>
-
-        <!-- FILTER DI SINI -->
+        <field name="view_id" ref="view_available_lot_tree"/>
         <field name="domain">
             [
-            ('product_id.product_tmpl_id.is_laptop', '=', True)
+                ('product_id.product_tmpl_id', '=', active_id),
+                ('is_available', '=', True)
             ]
         </field>
-
         <field name="context">
             {
                 'create': False,
                 'edit': False,
+                'delete': False
+            }
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!-- 4. ACTION MENU UTAMA -->
+    <!-- ============================= -->
+    <record id="action_borrowable_products" model="ir.actions.act_window">
+        <field name="name">Barang Bisa Dipinjam</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_borrowable_product_tree"/>
+        <field name="domain">
+            [('is_borrowable', '=', True)]
+        </field>
+        <field name="context">
+            {
+                'create': False,
+                'edit': False,
+                'delete': False
             }
         </field>
     </record>

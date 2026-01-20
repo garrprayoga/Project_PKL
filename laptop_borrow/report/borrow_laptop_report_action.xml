@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_borrow_laptop" model="ir.actions.report">
+        <field name="name">Laporan Peminjaman Barang</field>
+        <field name="model">borrow.laptop</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">laptop_borrow.borrow_laptop_report_template</field>
+        <field name="report_file">laptop_borrow.borrow_laptop_report_template</field>
+        <field name="print_report_name">Laporan Peminjaman</field>
+    </record>
+</odoo>

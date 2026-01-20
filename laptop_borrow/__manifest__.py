@@ -21,11 +21,14 @@
         'views/stock_view.xml',
         'views/jurusan_view.xml',
         'views/tingkat_view.xml',
+        'views/borrow_laptop_report_wizard.xml',
         'views/borrow_form_template.xml',
         'views/return_form_template.xml',
         'views/homepage_template.xml',
         'views/res_partner_view.xml',
         'views/menuitems.xml',
+        'report/borrow_laptop_report_action.xml',
+        'report/borrow_laptop_report_template.xml',
     ],
     'assets': {
         'web.assets_frontend': [

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="borrow_laptop_report_template">
+        <t t-call="web.external_layout">
+            <main>
+                <div class="page">
+
+                    <h2 style="text-align:center;">
+                        LAPORAN PEMINJAMAN BARANG
+                    </h2>
+
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kode</th>
+                                <th>Tanggal</th>
+                                <th>Tingkat</th>
+                                <th>Jurusan</th>
+                                <th>Kelas</th>
+                                <th>Peminjam</th>
+                                <th>Barang</th>
+                                <th>Jumlah</th>
+                                <th>Tujuan</th>
+                                <th>Guru Mapel</th>
+                                <th>Keterangan</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <t t-set="no" t-value="1"/>
+                            <t t-foreach="docs" t-as="o">
+                                <tr>
+                                    <td>
+                                        <t t-esc="no"/>
+                                        <t t-set="no" t-value="no + 1"/>
+                                    </td>
+
+                                    <td><t t-esc="o.name"/></td>
+                                    <td><t t-esc="o.borrow_date"/></td>
+
+                                    <td><t t-esc="o.tingkat_id.name if o.tingkat_id else ''"/></td>
+                                    <td><t t-esc="o.jurusan_id.name if o.jurusan_id else ''"/></td>
+                                    <td><t t-esc="o.class_id.name if o.class_id else ''"/></td>
+
+                                    <td><t t-esc="o.borrower_id.name if o.borrower_id else ''"/></td>
+                                    <td><t t-esc="o.product_tmpl_id.name if o.product_tmpl_id else ''"/></td>
+
+                                    <td><t t-esc="o.jumlah_pinjam"/></td>
+                                    <td><t t-esc="o.tujuan_peminjaman"/></td>
+
+                                    <!-- INI YANG DIPERBAIKI -->
+                                    <td><t t-esc="o.guru_mapel"/></td>
+
+                                    <td><t t-esc="o.keterangan"/></td>
+                                    <td><t t-esc="o.status"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>

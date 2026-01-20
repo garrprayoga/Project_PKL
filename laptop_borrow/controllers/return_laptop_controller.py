@@ -64,9 +64,15 @@ class ReturnLaptopController(http.Controller):
     @http.route('/form/pengembalian', auth='public', website=True)
     def return_form(self, **kwargs):
         classes = request.env['kelas'].sudo().search([])
+        tingkat = request.env['tingkat.sekolah'].sudo().search([('active', '=', True)])
+        jurusan = request.env['jurusan.sekolah'].sudo().search([('active', '=', True)])
+        
         return request.render('laptop_borrow.return_form_template', {
             'classes': classes,
+            'tingkat': tingkat,    # Tambahkan ini
+            'jurusan': jurusan,    # Tambahkan ini
         })
+
 
     # siswa per kelas
     @http.route('/get_students_by_class_return', type='http', auth='public', csrf=False)

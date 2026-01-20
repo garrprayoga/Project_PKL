@@ -15,7 +15,7 @@
               name="Tingkat Sekolah"
               parent="menu_master_root"
               action="action_tingkat_sekolah"
-              sequence="10"/>
+              sequence="30"/>
 
     <menuitem id="menu_jurusan_sekolah"
               name="Jurusan Sekolah"
@@ -23,28 +23,42 @@
               action="action_jurusan_sekolah"
               sequence="20"/>
 
-    <!-- OPERASIONAL DI NAVBAR -->
+    
+    <menuitem id="menu_borrowable_products"
+              name="Barang Tersedia"
+              parent="menu_master_root"
+              action="action_borrowable_products"
+              sequence="40"/>
+
     <menuitem id="menu_kelas"
               name="Data Kelas"
-              parent="menu_laptop_root"
+              parent="menu_master_root"
               action="action_kelas"
-              sequence="30"/>  <!-- ACTION UDAH ADA DI KELAS VIEW -->
+              sequence="10"/>
 
     <menuitem id="menu_borrow_laptop"
               name="Peminjaman Barang"
               parent="menu_laptop_root"
               action="action_borrow_laptop"
-              sequence="40"/>
+              sequence="10"/>
 
     <menuitem id="menu_return_laptop"
               name="Pengembalian Barang"
               parent="menu_laptop_root"
               action="action_return_laptop"
-              sequence="50"/>
+              sequence="20"/>
 
-    <menuitem id="menu_available_laptops"
-              name="Barang Tersedia"
-              parent="menu_laptop_root"
-              action="action_available_laptops"
-              sequence="60"/>
+
+    <!-- MENU ROOT LAPORAN -->
+    <menuitem id="menu_laporan_root"
+            name="Laporan"
+            parent="menu_laptop_root"
+            sequence="30"/>
+
+    <!-- SUB MENU LAPORAN -->
+    <menuitem id="menu_laporan_peminjaman"
+            name="Laporan Peminjaman"
+            parent="menu_laporan_root"
+            action="action_borrow_laptop_report_wizard"
+            sequence="10"/>
 </odoo>
